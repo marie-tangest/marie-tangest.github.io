@@ -60,6 +60,7 @@ a {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  z-index: 100;
 
   #gradient-canvas {
     width: 100%;
@@ -87,7 +88,7 @@ a {
       align-items: flex-start;
       justify-content: space-between;
       height: 100%;
-      color: #000;
+      color: #000000;
       z-index: 1;
 
       h1, h2 {
@@ -116,6 +117,12 @@ a {
         .email, .phone {
           font-size: 1.25rem;
           font-weight: 100;
+          color: #000000;
+          transition: color 0.5s ease;
+          
+          &:hover {
+            color: rgba(0, 0, 0, 0.5);
+          }
         }
       }
     }
