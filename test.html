@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>GSAP ScrollTrigger Project Slides (Slide & Fade Between Projects)</title>
+  <title>GSAP ScrollTrigger - Sticky Project Title & Only Current Slide Description at Full Opacity</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
     html, body {
@@ -56,19 +56,17 @@
       opacity: 0;
       z-index: 1;
       pointer-events: none;
-      will-change: transform, opacity;
-    }
-    .project-image.active {
-      z-index: 2;
-      pointer-events: auto;
+      will-change: opacity;
+      transition: opacity 0.15s;
     }
     .content {
       flex: 1 1 56vw;
-      padding: 50vh 3vw;
+      padding: 55vh 3vw;
       min-width: 320px;
     }
     .project {
-      margin-bottom: 20rem;
+      margin-bottom: 11rem;
+      position: relative; /* So sticky children don't escape parent */
     }
     .project-title {
       font-size: 2.2rem;
@@ -76,21 +74,35 @@
       margin-bottom: 2.2rem;
       color: #175bf0;
       letter-spacing: 0.02em;
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      background: #f5f6fa;
+      box-shadow: 0 2px 10px -6px #2223;
+      padding: 1.2rem 0 1.2rem 0.2rem;
+      border-top-left-radius: 1.5rem;
+      border-top-right-radius: 1.5rem;
+      transition: box-shadow 0.2s;
     }
     .slides {
-      margin: 0 0 0 5rem;
+      margin: 0 0 0 1.5rem;
       padding: 0;
       list-style: disc inside;
     }
     .slide {
       font-size: 1.18rem;
-      margin-bottom: 6rem;
+      margin-bottom: 15rem;
       background: #fff;
       border-radius: 1rem;
       padding: 1.4rem 1.5rem 1.4rem 2rem;
       box-shadow: 0 2px 14px -6px #aaa4;
       max-width: 40ch;
-      transition: box-shadow 0.3s;
+      transition: box-shadow 0.3s, opacity 0.25s;
+      opacity: 0.25;
+      height: 25vh;
+    }
+    .slide.active-desc {
+      opacity: 1 !important;
     }
     @media (max-width: 900px) {
       .container { flex-direction: column; }
@@ -102,6 +114,10 @@
         box-shadow: none;
       }
       .image-frame { height: 55vw; min-height: 200px; }
+      .project-title {
+        border-radius: 0;
+        padding-left: 0.8rem;
+      }
     }
   </style>
 </head>
@@ -157,97 +173,58 @@
   <script>
     gsap.registerPlugin(ScrollTrigger);
 
-    let currentProject = 0, currentSlide = 0;
+    // Hide all images except the very first
+    document.querySelectorAll('.project-image').forEach(img => img.style.opacity = 0);
+    document.querySelector('.project-image[data-project="0"][data-slide="0"]').style.opacity = 1;
 
-    function setInitialImage() {
-      document.querySelectorAll('.project-image').forEach(img => {
-        img.style.opacity = 0;
-        img.style.transform = 'translateX(0)';
-        img.classList.remove('active');
-      });
-      let img = document.querySelector('.project-image[data-project="0"][data-slide="0"]');
-      if(img) {
-        img.style.opacity = 1;
-        img.classList.add('active');
-      }
-    }
-    setInitialImage();
+    // Set all descriptions to faded, only the very first is full
+    document.querySelectorAll('.slide').forEach(slide => slide.classList.remove('active-desc'));
+    document.querySelector('.slide[data-slide="0"]').classList.add('active-desc');
 
-    // Slide between slides within a project, fade between projects
-    function switchImage(projectIdx, slideIdx, direction = 1, isProjectChange = false) {
-      if(currentProject === projectIdx && currentSlide === slideIdx) return;
-
-      let prevImg = document.querySelector(`.project-image[data-project="${currentProject}"][data-slide="${currentSlide}"]`);
-      let nextImg = document.querySelector(`.project-image[data-project="${projectIdx}"][data-slide="${slideIdx}"]`);
-      if(!nextImg || !prevImg) return;
-
-      if(isProjectChange) {
-        // Fade between images for project change
-        gsap.set(nextImg, { x: 0, opacity: 0, zIndex: 2 });
-        nextImg.classList.add('active');
-        gsap.timeline()
-          .to(prevImg, { opacity: 0, duration: 0.7, ease: "power2.inOut" }, 0)
-          .to(nextImg, { opacity: 1, duration: 0.7, ease: "power2.inOut" }, 0)
-          .add(() => {
-            prevImg.classList.remove('active');
-          });
-      } else {
-        // Slide between slides within the same project
-        gsap.set(nextImg, {
-          x: direction > 0 ? "100%" : "-100%",
-          opacity: 1,
-          zIndex: 2
-        });
-        nextImg.classList.add('active');
-        gsap.timeline({ defaults: {duration: 0.7, ease: "power2.inOut"} })
-          .to(nextImg, { x: "0%" }, 0)
-          .to(prevImg, { x: direction > 0 ? "-100%" : "100%", opacity: 0 }, 0)
-          .add(() => {
-            prevImg.classList.remove('active');
-            gsap.set(prevImg, {x: "0%"});
-          });
-      }
-
-      currentProject = projectIdx;
-      currentSlide = slideIdx;
-    }
-
-    // Set up triggers
-    document.querySelectorAll('.project').forEach((projectEl, projectIdx, projectArr) => {
-      // Project change trigger: always for the first slide
-      ScrollTrigger.create({
-        trigger: projectEl,
-        start: "top 50%",
-        end: "bottom 10%",
-        onEnter: () => {
-          // If coming from a different project, fade transition
-          if(currentProject !== projectIdx) switchImage(projectIdx, 0, 1, true);
-        },
-        onEnterBack: () => {
-          if(currentProject !== projectIdx) switchImage(projectIdx, 0, -1, true);
+    // For each slide, scrubbed crossfade between images as before,
+    // PLUS: update active-desc class on bulletpoints as you scroll
+    document.querySelectorAll('.project').forEach((projectEl, projectIdx) => {
+      const slides = Array.from(projectEl.querySelectorAll('.slide'));
+      slides.forEach((slideEl, slideIdx) => {
+        // Only crossfade if not the very last slide overall
+        let nextImg = document.querySelector(`.project-image[data-project="${projectIdx}"][data-slide="${slideIdx}"]`);
+        let prevImg = null;
+        if (slideIdx === 0 && projectIdx > 0) {
+          prevImg = document.querySelector(`.project-image[data-project="${projectIdx-1}"][data-slide="2"]`);
+        } else if (slideIdx > 0) {
+          prevImg = document.querySelector(`.project-image[data-project="${projectIdx}"][data-slide="${slideIdx-1}"]`);
         }
-      });
-
-      // For each slide
-      projectEl.querySelectorAll('.slide').forEach((slideEl, slideIdx, slideArr) => {
+        if (prevImg && nextImg) {
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: slideEl,
+              start: "top 60%",
+              end: "top 30%",
+              scrub: true
+            }
+          })
+          .to(prevImg, { opacity: 0, ease: "none" }, 0)
+          .to(nextImg, { opacity: 1, ease: "none" }, 0);
+        } else if (nextImg && projectIdx === 0 && slideIdx === 0) {
+          nextImg.style.opacity = 1;
+        }
+        // Sticky project titles are CSS only!
+        // Create a separate trigger for active description highlighting
         ScrollTrigger.create({
           trigger: slideEl,
           start: "top 50%",
-          end: "bottom 20%",
-          onEnter: self => {
-            // If staying within the same project, slide. Otherwise, fade (already handled above)
-            if(currentProject === projectIdx) {
-              switchImage(projectIdx, slideIdx, 1, false);
-            }
-          },
-          onEnterBack: self => {
-            if(currentProject === projectIdx) {
-              switchImage(projectIdx, slideIdx, -1, false);
-            }
-          }
+          end: "bottom 50%",
+          onEnter: () => updateActiveDesc(slideEl),
+          onEnterBack: () => updateActiveDesc(slideEl)
         });
       });
     });
+
+    function updateActiveDesc(activeSlide) {
+      document.querySelectorAll('.slide').forEach(slide => {
+        slide.classList.toggle('active-desc', slide === activeSlide);
+      });
+    }
   </script>
 </body>
 </html>
