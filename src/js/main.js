@@ -14,8 +14,7 @@ gsap.timeline({
     end: "bottom-=100 top",
     markers: false,
     pinSpacing: false,
-    scrub: true,
-    normalizeScroll: true
+    scrub: true
   }
 })
 .to(".hero .profile", {
@@ -24,41 +23,38 @@ gsap.timeline({
   gap: "0.75rem",
   lineHeight: 1
 })
-.to(".hero .profile-image", {
+.to(".hero .image-frame", {
   height: 80,
   width: 80,
   boxShadow: "0px 0px 0px 0px rgba(0, 0, 0, 0)",
   borderWidth: 0,
   borderColor: "transparent",
 }, "<")
-.to(".hero .profile-info .profile-name", {
+.to(".hero .info .name", {
   fontSize: "1.5rem",
   marginTop: "0.5rem"
 }, "<")
-.to(".hero .profile-info .profile-contact .profile-title, .hero .profile-info .profile-contact span", {
+.to([".hero .info .contact .title", ".hero .info .contact .email", ".hero .info .contact .phone"], {
   fontSize: "1rem",
 }, "<")
-.to(".hero .hero-scroll", {
+.to(".hero .scroll", {
   opacity: 0,
   marginBottom: "-100px"
 }, "<");
 
-gsap.timeline({
-  scrollTrigger: {
-    trigger: ".hero",
-    start: "bottom-=100 top",
-    endTrigger: "body",
-    end: "bottom-=100 top",
-    scrub: true,
-    markers: false,
-    pin: true,
-    pinSpacing: false,
-    normalizeScroll: true
-  }
+ScrollTrigger.create({
+  trigger: ".hero",
+  start: "bottom-=100 top",
+  endTrigger: "body",
+  end: "bottom-=100 top",
+  scrub: true,
+  markers: false,
+  pin: true,
+  pinSpacing: false
 });
 
 let directionSwitched = false;
-const container = document.querySelector(".hero .profile .profile-info .profile-contact");
+const container = document.querySelector(".hero .info .contact");
 gsap.timeline({
   scrollTrigger: {
     trigger: ".hero",
@@ -67,11 +63,8 @@ gsap.timeline({
     markers: false,
     pinSpacing: false,
     scrub: true,
-    normalizeScroll: true,
     onUpdate: self => {
       const progress = self.progress;
-
-      // Switch flex direction only once per direction change
       if (progress > 0.5 && !directionSwitched) {
         container.style.flexDirection = "row";
         container.style.alignItems = "center";
@@ -98,7 +91,7 @@ gsap.timeline({
 gsap.set(".projects-header", {
   y: "100vh"
 });
-gsap.set(".projects-container", {
+gsap.set(".projects-description", {
   y: "100vh"
 });
 
@@ -109,14 +102,13 @@ gsap.timeline({
     end: "top top-=100",
     markers: false,
     pinSpacing: false,
-    scrub: true,
-    normalizeScroll: true
+    scrub: true
   }
 })
 .to(".projects-header", {
   y: "2rem"
 })
-.to(".projects-container", {
+.to(".projects-description", {
   y: 0
 }, "-=0.5");
 
@@ -129,8 +121,7 @@ gsap.timeline({
     scrub: true,
     markers: true,
     pin: true,
-    pinSpacing: false,
-    normalizeScroll: true
+    pinSpacing: false
   }
 });
 

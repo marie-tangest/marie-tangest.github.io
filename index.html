@@ -11,42 +11,46 @@
     <link rel="stylesheet" href="/src/scss/main.scss">
   </head>
   <body>
-    <div class="hero">
+    <section class="hero">
       <canvas id="gradient-canvas"></canvas>
       <div class="profile">
-        <div class="profile-image">
-          <img src="profile.jpg" alt="Profile Picture" class="profile-img" id="profileImg">
+        <div class="image-frame">
+          <img src="profile.jpg" alt="Profile Picture" class="image">
         </div>
-        <div class="profile-info">
-          <h1 class="profile-name">Marie Tangest</h1>
-          <div class="profile-contact">
-            <h2 class="profile-title">Senior Web Developer</h2>
-            <span class="profile-email">marie.tangest@gmail.com</span>
-            <span class="profile-phone">+358 40 555 5555</span>
+        <div class="info">
+          <h1 class="name">Marie Tangest</h1>
+          <div class="contact">
+            <h2 class="title">Senior Web Developer</h2>
+            <span class="email">marie.tangest@gmail.com</span>
+            <span class="phone">+358 40 555 5555</span>
           </div>
         </div>
       </div>
-      <div class="hero-scroll">
+      <div class="scroll">
         <span>Scroll Down</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hero-scroll-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="arrow">
           <path d="M12 5v14M19 12l-7 7-7-7"/>
         </svg>
       </div>
-    </div>
-    <div class="projects">
-      <div class="projects-header">
+    </section>
+    <section class="projects">
+      <div class="header">
         <h2>Projects</h2>
       </div>
-      <div class="projects-container">
-        <div class="project-images">
-          <img src="https://picsum.photos/1440/810" alt="Project Image" class="project-img">
+      <div class="view">
+        <div class="images">
+          <div class="frame">
+            <img src="https://picsum.photos/1440/810" alt="Project Image" class="image">
+          </div>
         </div>
-        <div class="project-info">
-          <h2 class="project-title">Project Title</h2>
-          <p class="project-description">Project Description</p>
+        <div class="content">
+          <div class="info">
+            <h2 class="title">Project Title</h2>
+            <p class="description">Project Description</p>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
     <script type="module" src="/src/js/main.js"></script>
   </body>
 </html>

@@ -81,7 +81,7 @@ a {
     margin: auto;
     will-change: transform, opacity;
     
-    .profile-info {
+    .info {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -94,13 +94,13 @@ a {
         margin-bottom: 0;
       }
 
-      .profile-name {
+      .name {
         font-family: 'Playfair Display', serif;
         font-size: 4rem;
         font-weight: 400;
       }
 
-      .profile-contact {
+      .contact {
         display: flex;
         flex-direction: column;
         font-family: 'Lato', sans-serif;
@@ -108,19 +108,19 @@ a {
         justify-content: space-around;
         align-items: baseline;
 
-        .profile-title {
+        .title {
           font-size: 2rem;
           font-weight: 100;
         }
 
-        span {
+        .email, .phone {
           font-size: 1.25rem;
           font-weight: 100;
         }
       }
     }
 
-    .profile-image {
+    .image-frame {
       width: var(--profile-dimensions);
       height: var(--profile-dimensions);
       border-radius: 50%;
@@ -129,7 +129,7 @@ a {
       box-shadow: 0px 5px 15px 5px rgba(0, 0, 0, 0.25);
       transform-origin: left bottom;
 
-      img {
+      .image {
         width: 100%;
         height: auto;
         object-fit: cover;
@@ -138,7 +138,7 @@ a {
     }
   }
 
-  &-scroll {
+  .scroll {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -153,7 +153,7 @@ a {
     transform: translateX(-50%);
     gap: 1rem;
 
-    &-arrow {
+    .arrow {
       width: 24px;
       height: 24px;
       animation: bounce 2s infinite;
@@ -179,7 +179,7 @@ a {
 }
 
 .projects {
-  .projects-header {
+  .header {
     h2 {
       font-size: 2.5rem;
       font-weight: 100;
@@ -188,25 +188,23 @@ a {
     }
   }
   
-  .projects-container {
+  .view {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
-    margin: auto;
-    will-change: transform, opacity;
+    height: calc(100vh - 100px);
 
-    .project-image-container {
-      border-radius: 1.5rem;
-      overflow: hidden;
-      width: 50%;
+    .images {
+      display: flex;
+      flex: 0 0 35vw;
+      padding: 2.5rem 1.5rem;
+      flex-direction: column;
+      justify-content: flex-start;
+      position: relative;
       
-      .projects-images {
+      .frame {
         width: 100%;
         aspect-ratio: 1/1;
 
-        img {
+        .image {
           width: auto;
           height: 100%;
           object-fit: contain;
@@ -214,7 +212,7 @@ a {
       }
     }
 
-    .projects-info {
+    .content {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -222,6 +220,18 @@ a {
       height: 100%;
       width: 50%;
       padding-top: 50vh;
+      
+      .info {
+        .title {
+          font-size: 2rem;
+          font-weight: 100;
+        }
+
+        .description {
+          font-size: 1.25rem;
+          font-weight: 100;
+        }
+      }
     }
   }
 }
