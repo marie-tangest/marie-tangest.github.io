@@ -14,7 +14,8 @@ gsap.timeline({
     scrub: true,
     markers: true,
     pin: true,
-    pinSpacing: false
+    pinSpacing: false,
+    normalizeScroll: true
   }
 });
 
@@ -28,7 +29,8 @@ const profileTimeline = gsap.timeline({
     end: "bottom-=100 top",
     markers: true,
     pinSpacing: false,
-    scrub: true
+    scrub: true,
+    normalizeScroll: true
   }
 });
 
@@ -68,6 +70,7 @@ const profileContactTimeline = gsap.timeline({
     markers: true,
     pinSpacing: false,
     scrub: true,
+    normalizeScroll: true,
     onUpdate: self => {
       const progress = self.progress;
 

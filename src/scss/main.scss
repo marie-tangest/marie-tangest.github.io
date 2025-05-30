@@ -79,6 +79,7 @@ a {
     justify-content: center;
     gap: 2rem;
     margin: auto;
+    will-change: transform, opacity;
     
     .profile-info {
       display: flex;
@@ -150,6 +151,7 @@ a {
     bottom: 1rem;
     left: 50%;
     transform: translateX(-50%);
+    will-change: transform, opacity;
 
     &-arrow {
       width: 24px;

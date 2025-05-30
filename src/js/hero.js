@@ -307,7 +307,10 @@
         }), e(this, "pause", () => {
           this.conf.playing = false
         }), e(this, "play", () => {
-          requestAnimationFrame(this.animate), this.conf.playing = true
+          if (!this.conf.playing) {
+            this.conf.playing = true;
+            requestAnimationFrame(this.animate);
+          }
         }), e(this, "initGradient", (selector) => {
           this.el = document.querySelector(selector);
           this.connect();
@@ -348,7 +351,22 @@
           )
       }
       disconnect() {
-        this.scrollObserver && (window.removeEventListener("scroll", this.handleScroll), window.removeEventListener("mousedown", this.handleMouseDown), window.removeEventListener("mouseup", this.handleMouseUp), window.removeEventListener("keydown", this.handleKeyDown), this.scrollObserver.disconnect()), window.removeEventListener("resize", this.resize)
+        // Clear any pending scroll timeout
+        if (this.scrollingTimeout) {
+          clearTimeout(this.scrollingTimeout);
+          this.scrollingTimeout = null;
+        }
+        
+        // Remove all event listeners
+        window.removeEventListener('scroll', this.handleScroll, { passive: true });
+        window.removeEventListener('mousedown', this.handleMouseDown);
+        window.removeEventListener('mouseup', this.handleMouseUp);
+        window.removeEventListener('resize', this.resize);
+        
+        // Disconnect scroll observer if it exists
+        if (this.scrollObserver) {
+          this.scrollObserver.disconnect();
+        }
       }
       initMaterial() {
         this.uniforms = {
