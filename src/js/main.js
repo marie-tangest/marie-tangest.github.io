@@ -1,28 +1,13 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Gradient } from './hero';
+import optimizeTicker from './tick-optimizer';
 
-// Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
 
+optimizeTicker(gsap, 30);
+
 gsap.timeline({
-  scrollTrigger: {
-    trigger: ".hero",
-    start: "bottom-=100 top",      // when bottom minus 100px hits top of viewport
-    endTrigger: "body",       // when .stop-pin reaches top
-    end: "bottom-=100 top",
-    scrub: true,
-    markers: false,
-    pin: true,
-    pinSpacing: false,
-    normalizeScroll: true
-  }
-});
-
-let directionSwitched = false;
-const container = document.querySelector(".hero .profile .profile-info .profile-contact");
-
-const profileTimeline = gsap.timeline({
   scrollTrigger: {
     trigger: ".hero",
     start: "top top",
@@ -32,9 +17,8 @@ const profileTimeline = gsap.timeline({
     scrub: true,
     normalizeScroll: true
   }
-});
-
-profileTimeline.to(".hero .profile", {
+})
+.to(".hero .profile", {
   marginLeft: "10px",
   marginBottom: "10px",
   gap: "0.75rem",
@@ -51,18 +35,31 @@ profileTimeline.to(".hero .profile", {
   fontSize: "1.5rem",
   marginTop: "0.5rem"
 }, "<")
-.to(".hero .profile-info .profile-contact .profile-title", {
+.to(".hero .profile-info .profile-contact .profile-title, .hero .profile-info .profile-contact span", {
   fontSize: "1rem",
 }, "<")
-.to(".hero .profile-info .profile-contact span", {
-  fontSize: "1rem",
-}, "<")
-.to(".hero .hero__scroll", {
+.to(".hero .hero-scroll", {
   opacity: 0,
   marginBottom: "-100px"
 }, "<");
 
-const profileContactTimeline = gsap.timeline({
+gsap.timeline({
+  scrollTrigger: {
+    trigger: ".hero",
+    start: "bottom-=100 top",
+    endTrigger: "body",
+    end: "bottom-=100 top",
+    scrub: true,
+    markers: false,
+    pin: true,
+    pinSpacing: false,
+    normalizeScroll: true
+  }
+});
+
+let directionSwitched = false;
+const container = document.querySelector(".hero .profile .profile-info .profile-contact");
+gsap.timeline({
   scrollTrigger: {
     trigger: ".hero",
     start: "top top",
@@ -88,15 +85,43 @@ const profileContactTimeline = gsap.timeline({
       }
     },
   }
-});
-
-profileContactTimeline.to(container, {
+})
+.to(container, {
   opacity: 0,
   duration: 0.2
 })
 .to(container, {
   opacity: 1,
   duration: 0.2
+});
+
+gsap.timeline({
+  scrollTrigger: {
+    trigger: ".projects",
+    start: "top bottom",
+    end: "top top-=100",
+    markers: false,
+    pinSpacing: false,
+    scrub: true,
+    normalizeScroll: true
+  }
+})
+.to(".projects-header", {
+  paddingTop: 0
+});
+
+gsap.timeline({
+  scrollTrigger: {
+    trigger: ".projects",
+    start: "top top+=100",
+    endTrigger: "body",
+    end: "bottom-=100 top",
+    scrub: true,
+    markers: true,
+    pin: true,
+    pinSpacing: false,
+    normalizeScroll: true
+  }
 });
 
 const gradient = new Gradient();
