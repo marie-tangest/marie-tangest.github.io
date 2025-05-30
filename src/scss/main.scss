@@ -187,22 +187,22 @@ a {
 
 .projects {
   .header {
-    h2 {
+    padding: 2rem 0;
+    .title {
       font-size: 2.5rem;
       font-weight: 100;
-      margin: 0 auto 2rem auto;
+      margin: 0;
       text-align: center;
     }
   }
   
   .view {
     display: flex;
-    height: calc(100vh - 100px);
 
     .images {
       display: flex;
-      flex: 0 0 35vw;
-      padding: 2.5rem 1.5rem;
+      width: 60%;
+      padding: 0 2rem;
       flex-direction: column;
       justify-content: flex-start;
       position: relative;
@@ -210,6 +210,9 @@ a {
       .frame {
         width: 100%;
         aspect-ratio: 1/1;
+        overflow: hidden;
+        border-radius: 2rem;
+        margin: 0 auto;
 
         .image {
           width: auto;
@@ -225,7 +228,7 @@ a {
       align-items: flex-start;
       justify-content: space-between;
       height: 100%;
-      width: 50%;
+      width: 40%;
       padding-top: 50vh;
       
       .info {

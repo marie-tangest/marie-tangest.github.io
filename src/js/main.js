@@ -88,41 +88,54 @@ gsap.timeline({
   duration: 0.2
 });
 
-gsap.set(".projects-header", {
-  y: "100vh"
-});
-gsap.set(".projects-description", {
-  y: "100vh"
-});
-
-gsap.timeline({
+gsap.from('.projects .header .title', {
+  y: "100vh",
   scrollTrigger: {
-    trigger: ".projects",
-    start: "top bottom",
-    end: "top top-=100",
-    markers: false,
-    pinSpacing: false,
-    scrub: true
-  }
-})
-.to(".projects-header", {
-  y: "2rem"
-})
-.to(".projects-description", {
-  y: 0
-}, "-=0.5");
-
-gsap.timeline({
-  scrollTrigger: {
-    trigger: ".projects",
-    start: "top top+=100",
-    endTrigger: "body",
-    end: "bottom-=100 top",
+    trigger: '.projects',
+    start: 'top bottom',
+    end: 'top top+=100',
+    endTrigger: '.projects .header',
     scrub: true,
-    markers: true,
-    pin: true,
+    markers: false,
     pinSpacing: false
   }
+});
+
+ScrollTrigger.create({
+  trigger: '.projects .header',
+  start: 'top top+=100',
+  endTrigger: 'body',
+  end: 'bottom-=100 top',
+  scrub: true,
+  markers: false,
+  pin: true,
+  pinSpacing: false
+});
+
+gsap.from('.projects .view .frame', {
+  y: "500vh",
+  width: "5%",
+  borderRadius: 0,
+  scrollTrigger: {
+    trigger: '.projects',
+    start: 'top bottom',
+    end: 'top top+=100',
+    endTrigger: '.projects .header',
+    scrub: true,
+    markers: true,
+    pinSpacing: false
+  }
+});
+
+ScrollTrigger.create({
+  trigger: '.projects .header',
+  start: 'top top+=100',
+  endTrigger: 'body',
+  end: 'bottom-=100 top',
+  scrub: true,
+  markers: false,
+  pin: '.projects .view .images',
+  pinSpacing: false
 });
 
 const gradient = new Gradient();
