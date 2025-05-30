@@ -95,6 +95,13 @@ gsap.timeline({
   duration: 0.2
 });
 
+gsap.set(".projects-header", {
+  y: "100vh"
+});
+gsap.set(".projects-container", {
+  y: "100vh"
+});
+
 gsap.timeline({
   scrollTrigger: {
     trigger: ".projects",
@@ -107,8 +114,11 @@ gsap.timeline({
   }
 })
 .to(".projects-header", {
-  paddingTop: 0
-});
+  y: "2rem"
+})
+.to(".projects-container", {
+  y: 0
+}, "-=0.5");
 
 gsap.timeline({
   scrollTrigger: {

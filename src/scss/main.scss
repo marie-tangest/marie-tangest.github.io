@@ -180,11 +180,10 @@ a {
 
 .projects {
   .projects-header {
-    padding-top: 100vh;
     h2 {
       font-size: 2.5rem;
       font-weight: 100;
-      margin: 2rem auto;
+      margin: 0 auto 2rem auto;
       text-align: center;
     }
   }
@@ -198,25 +197,31 @@ a {
     margin: auto;
     will-change: transform, opacity;
 
-    .project-images {
+    .project-image-container {
       border-radius: 1.5rem;
       overflow: hidden;
       width: 50%;
       
-      img {
+      .projects-images {
         width: 100%;
-        height: auto;
-        object-fit: cover;
+        aspect-ratio: 1/1;
+
+        img {
+          width: auto;
+          height: 100%;
+          object-fit: contain;
+        }
       }
     }
 
-    .project-info {
+    .projects-info {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       justify-content: space-between;
       height: 100%;
       width: 50%;
+      padding-top: 50vh;
     }
   }
 }
