@@ -12,7 +12,7 @@ gsap.timeline({
     endTrigger: "body",       // when .stop-pin reaches top
     end: "bottom-=100 top",
     scrub: true,
-    markers: true,
+    markers: false,
     pin: true,
     pinSpacing: false,
     normalizeScroll: true
@@ -27,7 +27,7 @@ const profileTimeline = gsap.timeline({
     trigger: ".hero",
     start: "top top",
     end: "bottom-=100 top",
-    markers: true,
+    markers: false,
     pinSpacing: false,
     scrub: true,
     normalizeScroll: true
@@ -67,7 +67,7 @@ const profileContactTimeline = gsap.timeline({
     trigger: ".hero",
     start: "top top",
     end: "bottom-=100 top",
-    markers: true,
+    markers: false,
     pinSpacing: false,
     scrub: true,
     normalizeScroll: true,
