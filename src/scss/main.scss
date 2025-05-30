@@ -148,10 +148,10 @@ a {
     transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
     will-change: transform, opacity;
     position: absolute;
-    bottom: 1rem;
+    bottom: 3rem;
     left: 50%;
     transform: translateX(-50%);
-    will-change: transform, opacity;
+    gap: 1rem;
 
     &-arrow {
       width: 24px;
@@ -165,10 +165,10 @@ a {
         transform: translateY(0);
       }
       40% {
-        transform: translateY(-10px);
+        transform: translateY(-1rem);
       }
       60% {
-        transform: translateY(-5px);
+        transform: translateY(-0.75rem);
       }
     }
     
