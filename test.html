@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GSAP ScrollTrigger Project Slides (Slide & Fade Between Projects)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #f5f6fa;
+      font-family: sans-serif;
+      color: #222;
+    }
+    .container {
+      display: flex;
+      min-height: 100vh;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .image-frame {
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 44vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #111;
+      border-top-left-radius: 2rem;
+      border-bottom-left-radius: 2rem;
+      overflow: hidden;
+      min-width: 340px;
+      box-shadow: 6px 0 40px -16px #2222;
+    }
+    .images-holder {
+      position: relative;
+      width: 90%;
+      height: 65vh;
+      min-height: 280px;
+      max-height: 600px;
+      border-radius: 2rem;
+      overflow: hidden;
+      background: #222;
+      box-shadow: 0 8px 32px -6px #0004;
+    }
+    .project-image {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      z-index: 1;
+      pointer-events: none;
+      will-change: transform, opacity;
+    }
+    .project-image.active {
+      z-index: 2;
+      pointer-events: auto;
+    }
+    .content {
+      flex: 1 1 56vw;
+      padding: 50vh 3vw;
+      min-width: 320px;
+    }
+    .project {
+      margin-bottom: 20rem;
+    }
+    .project-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 2.2rem;
+      color: #175bf0;
+      letter-spacing: 0.02em;
+    }
+    .slides {
+      margin: 0 0 0 5rem;
+      padding: 0;
+      list-style: disc inside;
+    }
+    .slide {
+      font-size: 1.18rem;
+      margin-bottom: 6rem;
+      background: #fff;
+      border-radius: 1rem;
+      padding: 1.4rem 1.5rem 1.4rem 2rem;
+      box-shadow: 0 2px 14px -6px #aaa4;
+      max-width: 40ch;
+      transition: box-shadow 0.3s;
+    }
+    @media (max-width: 900px) {
+      .container { flex-direction: column; }
+      .image-frame, .content {
+        width: 100vw;
+        min-width: unset;
+        border-radius: 0;
+        max-width: 100vw;
+        box-shadow: none;
+      }
+      .image-frame { height: 55vw; min-height: 200px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="image-frame">
+      <div class="images-holder">
+        <!-- 9 images, 3 per project, all hidden initially -->
+        <img src="https://picsum.photos/id/1015/800/600" class="project-image" data-project="0" data-slide="0" alt="Project 1 Slide 1">
+        <img src="https://picsum.photos/id/1016/800/600" class="project-image" data-project="0" data-slide="1" alt="Project 1 Slide 2">
+        <img src="https://picsum.photos/id/1018/800/600" class="project-image" data-project="0" data-slide="2" alt="Project 1 Slide 3">
+
+        <img src="https://picsum.photos/id/1021/800/600" class="project-image" data-project="1" data-slide="0" alt="Project 2 Slide 1">
+        <img src="https://picsum.photos/id/1024/800/600" class="project-image" data-project="1" data-slide="1" alt="Project 2 Slide 2">
+        <img src="https://picsum.photos/id/1025/800/600" class="project-image" data-project="1" data-slide="2" alt="Project 2 Slide 3">
+
+        <img src="https://picsum.photos/id/1035/800/600" class="project-image" data-project="2" data-slide="0" alt="Project 3 Slide 1">
+        <img src="https://picsum.photos/id/1037/800/600" class="project-image" data-project="2" data-slide="1" alt="Project 3 Slide 2">
+        <img src="https://picsum.photos/id/1042/800/600" class="project-image" data-project="2" data-slide="2" alt="Project 3 Slide 3">
+      </div>
+    </div>
+    <div class="content">
+      <div class="project" data-project="0">
+        <div class="project-title">Project One</div>
+        <ul class="slides">
+          <li class="slide" data-slide="0">Project One: Introduction and overview bulletpoint.</li>
+          <li class="slide" data-slide="1">Project One: Core features or main highlight.</li>
+          <li class="slide" data-slide="2">Project One: Impact, results, or interesting facts.</li>
+        </ul>
+      </div>
+      <div class="project" data-project="1">
+        <div class="project-title">Project Two</div>
+        <ul class="slides">
+          <li class="slide" data-slide="0">Project Two: Problem statement or starting point.</li>
+          <li class="slide" data-slide="1">Project Two: Technical solution or creative process.</li>
+          <li class="slide" data-slide="2">Project Two: Takeaways or future outlook.</li>
+        </ul>
+      </div>
+      <div class="project" data-project="2">
+        <div class="project-title">Project Three</div>
+        <ul class="slides">
+          <li class="slide" data-slide="0">Project Three: Initial idea and team introduction.</li>
+          <li class="slide" data-slide="1">Project Three: Key challenges faced and solved.</li>
+          <li class="slide" data-slide="2">Project Three: Final result and next steps.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- GSAP and ScrollTrigger via CDN -->
+  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    let currentProject = 0, currentSlide = 0;
+
+    function setInitialImage() {
+      document.querySelectorAll('.project-image').forEach(img => {
+        img.style.opacity = 0;
+        img.style.transform = 'translateX(0)';
+        img.classList.remove('active');
+      });
+      let img = document.querySelector('.project-image[data-project="0"][data-slide="0"]');
+      if(img) {
+        img.style.opacity = 1;
+        img.classList.add('active');
+      }
+    }
+    setInitialImage();
+
+    // Slide between slides within a project, fade between projects
+    function switchImage(projectIdx, slideIdx, direction = 1, isProjectChange = false) {
+      if(currentProject === projectIdx && currentSlide === slideIdx) return;
+
+      let prevImg = document.querySelector(`.project-image[data-project="${currentProject}"][data-slide="${currentSlide}"]`);
+      let nextImg = document.querySelector(`.project-image[data-project="${projectIdx}"][data-slide="${slideIdx}"]`);
+      if(!nextImg || !prevImg) return;
+
+      if(isProjectChange) {
+        // Fade between images for project change
+        gsap.set(nextImg, { x: 0, opacity: 0, zIndex: 2 });
+        nextImg.classList.add('active');
+        gsap.timeline()
+          .to(prevImg, { opacity: 0, duration: 0.7, ease: "power2.inOut" }, 0)
+          .to(nextImg, { opacity: 1, duration: 0.7, ease: "power2.inOut" }, 0)
+          .add(() => {
+            prevImg.classList.remove('active');
+          });
+      } else {
+        // Slide between slides within the same project
+        gsap.set(nextImg, {
+          x: direction > 0 ? "100%" : "-100%",
+          opacity: 1,
+          zIndex: 2
+        });
+        nextImg.classList.add('active');
+        gsap.timeline({ defaults: {duration: 0.7, ease: "power2.inOut"} })
+          .to(nextImg, { x: "0%" }, 0)
+          .to(prevImg, { x: direction > 0 ? "-100%" : "100%", opacity: 0 }, 0)
+          .add(() => {
+            prevImg.classList.remove('active');
+            gsap.set(prevImg, {x: "0%"});
+          });
+      }
+
+      currentProject = projectIdx;
+      currentSlide = slideIdx;
+    }
+
+    // Set up triggers
+    document.querySelectorAll('.project').forEach((projectEl, projectIdx, projectArr) => {
+      // Project change trigger: always for the first slide
+      ScrollTrigger.create({
+        trigger: projectEl,
+        start: "top 50%",
+        end: "bottom 10%",
+        onEnter: () => {
+          // If coming from a different project, fade transition
+          if(currentProject !== projectIdx) switchImage(projectIdx, 0, 1, true);
+        },
+        onEnterBack: () => {
+          if(currentProject !== projectIdx) switchImage(projectIdx, 0, -1, true);
+        }
+      });
+
+      // For each slide
+      projectEl.querySelectorAll('.slide').forEach((slideEl, slideIdx, slideArr) => {
+        ScrollTrigger.create({
+          trigger: slideEl,
+          start: "top 50%",
+          end: "bottom 20%",
+          onEnter: self => {
+            // If staying within the same project, slide. Otherwise, fade (already handled above)
+            if(currentProject === projectIdx) {
+              switchImage(projectIdx, slideIdx, 1, false);
+            }
+          },
+          onEnterBack: self => {
+            if(currentProject === projectIdx) {
+              switchImage(projectIdx, slideIdx, -1, false);
+            }
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
