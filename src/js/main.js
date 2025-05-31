@@ -122,7 +122,7 @@ gsap.from('.projects .view .frame', {
     end: 'top top+=100',
     endTrigger: '.projects .header',
     scrub: true,
-    markers: true,
+    markers: false,
     pinSpacing: false
   }
 });

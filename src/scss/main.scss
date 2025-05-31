@@ -200,24 +200,32 @@ a {
     display: flex;
 
     .images {
-      display: flex;
+      display: block;
       width: 60%;
       padding: 0 2rem;
-      flex-direction: column;
-      justify-content: flex-start;
       position: relative;
       
       .frame {
+        display: block;
         width: 100%;
         aspect-ratio: 1/1;
         overflow: hidden;
         border-radius: 2rem;
         margin: 0 auto;
+        position: relative;
 
         .image {
+          display: block;
           width: auto;
           height: 100%;
-          object-fit: contain;
+          object-fit: cover;
+          position: absolute;
+          opacity: 1;
+          will-change: opacity;
+          pointer-events: none;
+          top: 0;
+          left: 0;
+          z-index: 1;
         }
       }
     }
