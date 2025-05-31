@@ -138,5 +138,83 @@ ScrollTrigger.create({
   pinSpacing: false
 });
 
+// Hide all images except the very first
+document.querySelectorAll('.view .frame .image').forEach(img => img.style.opacity = 0);
+document.querySelector('.view .frame .image[data-project="0"][data-slide="0"]').style.opacity = 1;
+
+// Set all descriptions to faded, only the very first is full
+document.querySelectorAll('.description').forEach(slide => slide.classList.remove('active-desc'));
+document.querySelector('.description[data-slide="0"]').classList.add('active-desc');
+
+const projectsTitle = document.querySelector('.projects .header');
+
+// For each slide, scrubbed crossfade between images as before,
+// PLUS: update active-desc class on bulletpoints as you scroll
+document.querySelectorAll('.projects .view .content .info').forEach((projectEl, projectIdx) => {
+  const titleEl = projectEl.querySelector('.title');
+  ScrollTrigger.create({
+    trigger: projectEl,
+    start: `top top+=${projectsTitle.offsetHeight + 100}`,
+    endTrigger: '.projects .view .content',
+    end: 'bottom top',
+    scrub: true,
+    markers: false,
+    pinSpacing: false,
+    pin: titleEl
+  });
+
+  const slides = Array.from(projectEl.querySelectorAll('.description'));
+  slides.forEach((slideEl, slideIdx) => {
+    let nextImg = document.querySelector(`.image[data-project="${projectIdx}"][data-slide="${slideIdx}"]`);
+    let prevImg = null;
+    if (slideIdx === 0 && projectIdx > 0) {
+      prevImg = document.querySelector(`.image[data-project="${projectIdx-1}"][data-slide="2"]`);
+    } else if (slideIdx > 0) {
+      prevImg = document.querySelector(`.image[data-project="${projectIdx}"][data-slide="${slideIdx-1}"]`);
+    }
+    if (prevImg && nextImg) {
+      gsap.timeline({
+        scrollTrigger: {
+          trigger: slideEl,
+          start: "top 60%",
+          end: "top 30%",
+          scrub: true,
+          markers: false,
+        }
+      })
+      .to(prevImg, { opacity: 0, ease: "none" }, 0)
+      .to(nextImg, { opacity: 1, ease: "none" }, 0);
+    } else if (nextImg && projectIdx === 0 && slideIdx === 0) {
+      nextImg.style.opacity = 1;
+    }
+    
+    ScrollTrigger.create({
+      trigger: slideEl,
+      start: "top 50%",
+      end: "bottom 50%",
+      markers: false,
+      onEnter: () => updateActiveDesc(slideEl),
+      onEnterBack: () => updateActiveDesc(slideEl)
+    });
+
+    ScrollTrigger.create({
+      trigger: slideEl,
+      start: `top top+=${projectsTitle.offsetHeight + 100}`,
+      endTrigger: '.projects .view .content',
+      end: 'bottom top',
+      scrub: true,
+      markers: false,
+      pinSpacing: false,
+      pin: true
+    });
+  });
+});
+
+function updateActiveDesc(activeSlide) {
+  document.querySelectorAll('.description').forEach(slide => {
+    slide.classList.toggle('active-desc', slide === activeSlide);
+  });
+}
+
 const gradient = new Gradient();
 gradient.initGradient("#gradient-canvas");
