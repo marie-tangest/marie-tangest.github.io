@@ -21,7 +21,8 @@ gsap.timeline({
   marginLeft: "10px",
   marginBottom: "10px",
   gap: "0.75rem",
-  lineHeight: 1
+  lineHeight: 1,
+  ease: 'power1.inOut',
 })
 .to(".hero .image-frame", {
   height: 80,
@@ -29,17 +30,21 @@ gsap.timeline({
   boxShadow: "0px 0px 0px 0px rgba(0, 0, 0, 0)",
   borderWidth: 0,
   borderColor: "transparent",
+  ease: 'power1.inOut',
 }, "<")
 .to(".hero .info .name", {
   fontSize: "1.5rem",
-  marginTop: "0.5rem"
+  marginTop: "0.5rem",
+  ease: 'power1.inOut'
 }, "<")
 .to([".hero .info .contact .title", ".hero .info .contact .email", ".hero .info .contact .phone"], {
   fontSize: "1rem",
+  ease: 'power1.inOut',
 }, "<")
 .to(".hero .scroll", {
   opacity: 0,
-  marginBottom: "-100px"
+  marginBottom: "-100px",
+  ease: 'power1.inOut',
 }, "<");
 
 ScrollTrigger.create({
@@ -81,15 +86,18 @@ gsap.timeline({
 })
 .to(container, {
   opacity: 0,
-  duration: 0.2
+  duration: 0.2,
+  ease: 'power1.inOut',
 })
 .to(container, {
   opacity: 1,
-  duration: 0.2
+  duration: 0.2,
+  ease: 'power1.inOut',
 });
 
-gsap.from('.projects .header .title', {
+/*gsap.from('.projects .header .title', {
   y: "100vh",
+  ease: 'power1.inOut',
   scrollTrigger: {
     trigger: '.projects',
     start: 'top bottom',
@@ -99,7 +107,35 @@ gsap.from('.projects .header .title', {
     markers: false,
     pinSpacing: false
   }
+});*/
+
+Array.from(document.querySelectorAll('.swirl-path')).forEach(path => {
+  const length = path.getTotalLength();
+  path.style.strokeDasharray = length;
+  path.style.strokeDashoffset = length;
 });
+
+gsap.timeline({
+  scrollTrigger: {
+    trigger: '.projects',
+    start: 'top bottom',
+    end: 'top top+=100',
+    endTrigger: '.projects .header',
+    scrub: true,
+    markers: false,
+    pinSpacing: false
+  }
+})
+.from('.projects .header .title', {
+  y: "100vh",
+  duration: 1,
+  ease: 'power1.inOut',
+})
+.to(document.querySelectorAll('.swirl-path'), { 
+  strokeDashoffset: 0,
+  duration: 0.5,
+  ease: 'power1.inOut'
+}, 0.5);
 
 ScrollTrigger.create({
   trigger: '.projects .header',
@@ -116,6 +152,7 @@ gsap.from('.projects .view .frame', {
   y: "500vh",
   width: "5%",
   borderRadius: 0,
+  ease: 'power1.inOut',
   scrollTrigger: {
     trigger: '.projects',
     start: 'top bottom',
@@ -163,8 +200,7 @@ document.querySelectorAll('.projects .view .content .info').forEach((projectEl, 
     pin: titleEl
   });
 
-  const slides = Array.from(projectEl.querySelectorAll('.description'));
-  slides.forEach((slideEl, slideIdx) => {
+Array.from(projectEl.querySelectorAll('.description')).forEach((slideEl, slideIdx) => {
     let nextImg = document.querySelector(`.image[data-project="${projectIdx}"][data-slide="${slideIdx}"]`);
     let prevImg = null;
     if (slideIdx === 0 && projectIdx > 0) {
