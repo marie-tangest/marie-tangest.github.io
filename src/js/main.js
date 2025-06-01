@@ -45,6 +45,10 @@ gsap.timeline({
   opacity: 0,
   marginBottom: "-100px",
   ease: 'power1.inOut',
+}, "<")
+.to("#gradient-canvas", {
+  opacity: 0,
+  ease: 'power1.inOut',
 }, "<");
 
 ScrollTrigger.create({
@@ -94,20 +98,6 @@ gsap.timeline({
   duration: 0.2,
   ease: 'power1.inOut',
 });
-
-/*gsap.from('.projects .header .title', {
-  y: "100vh",
-  ease: 'power1.inOut',
-  scrollTrigger: {
-    trigger: '.projects',
-    start: 'top bottom',
-    end: 'top top+=100',
-    endTrigger: '.projects .header',
-    scrub: true,
-    markers: false,
-    pinSpacing: false
-  }
-});*/
 
 Array.from(document.querySelectorAll('.swirl-path')).forEach(path => {
   const length = path.getTotalLength();

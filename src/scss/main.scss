@@ -4,7 +4,7 @@
   --primary-hover: #60a5fa;
   --dark-bg: #0f172a;
   --darker-bg: #020617;
-  --text-color: #f8fafc;
+  --text-color: #000;
   --text-muted: #94a3b8;
   --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   --border-radius: 8px;
@@ -27,9 +27,14 @@ body {
   font-family: 'Lato', sans-serif;
   line-height: 1.6;
   color: var(--text-color);
-  background-color: var(--darker-bg);
+  background: #cdc2b6;
   overflow-x: hidden;
   min-height: 100vh;
+  background: url("/bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
 }
 
 // Typography
@@ -61,6 +66,8 @@ a {
   flex-direction: column;
   justify-content: center;
   z-index: 100;
+  background-color: rgba(#ffaf01, 0.5);
+  will-change: transform, opacity;
 
   #gradient-canvas {
     width: 100%;
@@ -71,6 +78,7 @@ a {
     --gradient-color-4: #ffaf01;
     z-index: 0;
     position: absolute;
+    will-change: transform, opacity;
   }
 
   .profile {
@@ -90,6 +98,7 @@ a {
       height: 100%;
       color: #000000;
       z-index: 1;
+      will-change: transform;
 
       h1, h2 {
         margin-bottom: 0;
@@ -99,6 +108,7 @@ a {
         font-family: 'Playfair Display', serif;
         font-size: 4rem;
         font-weight: 400;
+        will-change: transform;
       }
 
       .contact {
@@ -108,10 +118,12 @@ a {
         height: 100%;
         justify-content: space-around;
         align-items: baseline;
+        will-change: transform;
 
         .title {
           font-size: 2rem;
           font-weight: 100;
+          will-change: transform;
         }
 
         .email, .phone {
@@ -119,6 +131,7 @@ a {
           font-weight: 100;
           color: #000000;
           transition: color 0.5s ease;
+          will-change: transform, opacity;
           
           &:hover {
             color: rgba(0, 0, 0, 0.5);
@@ -225,7 +238,7 @@ a {
         width: 70vh;
         aspect-ratio: 1/1;
         overflow: hidden;
-        border-radius: 2rem;
+        border-radius: .5rem;
         margin: 0 0 0 auto;
         position: relative;
 
@@ -262,7 +275,6 @@ a {
         .title {
           font-size: 2rem;
           font-weight: 100;
-          background-color: var(--darker-bg);
           z-index: 10;
         }
 
