@@ -1,8 +1,8 @@
-export default function optimizeTicker(gsap, fpsThreshold = 30) {
-    function monitorFPS(callback) {
+export default function optimizeTicker(gsap: GSAP, fpsThreshold = 30) {
+    function monitorFPS(callback: Function) {
         let last = performance.now();
         let frames = 0;
-        function loop(now) {
+        function loop(now: DOMHighResTimeStamp) {
           frames++;
           const delta = now - last;
           if (delta >= 1000) {
@@ -17,7 +17,7 @@ export default function optimizeTicker(gsap, fpsThreshold = 30) {
       }
       
       // Custom WebGL ticker using a hidden canvas
-      let cleanupWebGLTicker = null;
+      let cleanupWebGLTicker: Function | null = null;
       
       function customTickFn() {
         // 1. Create a tiny hidden canvas
@@ -31,11 +31,11 @@ export default function optimizeTicker(gsap, fpsThreshold = 30) {
         document.body.appendChild(canvas);
       
         // 2. Get WebGL context
-        let gl = canvas.getContext("webgl");
+        let gl = canvas.getContext("webgl") as WebGLRenderingContext;
       
         // 3. Use a render loop to call gsap.updateRoot()
         let running = true;
-        function webglLoop(time) {
+        function webglLoop(time: number) {
           gl.clear(gl.COLOR_BUFFER_BIT); // optional/minimal
           gsap.updateRoot(time / 1000); // Time in seconds!
           if (running) requestAnimationFrame(webglLoop);
@@ -50,7 +50,7 @@ export default function optimizeTicker(gsap, fpsThreshold = 30) {
       }
       
       // Monitor FPS and switch tickers
-      monitorFPS(fps => {
+      monitorFPS((fps: number) => {
         if (fps < fpsThreshold && !cleanupWebGLTicker) {
           gsap.ticker.remove(gsap.updateRoot);
           cleanupWebGLTicker = customTickFn();

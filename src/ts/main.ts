@@ -1,6 +1,6 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Gradient } from './hero';
+import { Gradient } from './hero.js';
 import optimizeTicker from './tick-optimizer';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -63,7 +63,7 @@ ScrollTrigger.create({
 });
 
 let directionSwitched = false;
-const container = document.querySelector(".hero .info .contact");
+const container = document.querySelector(".hero .info .contact") as HTMLElement;
 gsap.timeline({
   scrollTrigger: {
     trigger: ".hero",
@@ -99,10 +99,10 @@ gsap.timeline({
   ease: 'power1.inOut',
 });
 
-Array.from(document.querySelectorAll('.swirl-path')).forEach(path => {
-  const length = path.getTotalLength();
-  path.style.strokeDasharray = length;
-  path.style.strokeDashoffset = length;
+Array.from(document.querySelectorAll('.swirl-path')).forEach((path: Element) => {
+  const length = (path as SVGPathElement).getTotalLength();
+  (path as SVGPathElement).style.strokeDasharray = length.toString();
+  (path as SVGPathElement).style.strokeDashoffset = length.toString();
 });
 
 gsap.timeline({
@@ -166,19 +166,19 @@ ScrollTrigger.create({
 });
 
 // Hide all images except the very first
-document.querySelectorAll('.view .frame .image').forEach(img => img.style.opacity = 0);
-document.querySelector('.view .frame .image[data-project="0"][data-slide="0"]').style.opacity = 1;
+document.querySelectorAll('.view .frame .image').forEach(img => (img as HTMLElement).style.opacity = "0");
+(document.querySelector('.view .frame .image[data-project="0"][data-slide="0"]') as HTMLElement).style.opacity = "1";
 
 // Set all descriptions to faded, only the very first is full
 document.querySelectorAll('.description').forEach(slide => slide.classList.remove('active-desc'));
-document.querySelector('.description[data-slide="0"]').classList.add('active-desc');
+(document.querySelector('.description[data-slide="0"]') as HTMLElement).classList.add('active-desc');
 
-const projectsTitle = document.querySelector('.projects .header');
+const projectsTitle = document.querySelector('.projects .header') as HTMLElement;
 
 // For each slide, scrubbed crossfade between images as before,
 // PLUS: update active-desc class on bulletpoints as you scroll
 document.querySelectorAll('.projects .view .content .info').forEach((projectEl, projectIdx) => {
-  const titleEl = projectEl.querySelector('.title');
+  const titleEl = projectEl.querySelector('.title') as HTMLElement;
   ScrollTrigger.create({
     trigger: projectEl,
     start: `top top+=${projectsTitle.offsetHeight + 100}`,
@@ -191,12 +191,12 @@ document.querySelectorAll('.projects .view .content .info').forEach((projectEl, 
   });
 
 Array.from(projectEl.querySelectorAll('.description')).forEach((slideEl, slideIdx) => {
-    let nextImg = document.querySelector(`.image[data-project="${projectIdx}"][data-slide="${slideIdx}"]`);
+    let nextImg = document.querySelector(`.image[data-project="${projectIdx}"][data-slide="${slideIdx}"]`) as HTMLElement;
     let prevImg = null;
     if (slideIdx === 0 && projectIdx > 0) {
-      prevImg = document.querySelector(`.image[data-project="${projectIdx-1}"][data-slide="2"]`);
+      prevImg = document.querySelector(`.image[data-project="${projectIdx-1}"][data-slide="2"]`) as HTMLElement;
     } else if (slideIdx > 0) {
-      prevImg = document.querySelector(`.image[data-project="${projectIdx}"][data-slide="${slideIdx-1}"]`);
+      prevImg = document.querySelector(`.image[data-project="${projectIdx}"][data-slide="${slideIdx-1}"]`) as HTMLElement;
     }
     if (prevImg && nextImg) {
       gsap.timeline({
@@ -211,7 +211,7 @@ Array.from(projectEl.querySelectorAll('.description')).forEach((slideEl, slideId
       .to(prevImg, { opacity: 0, ease: "none" }, 0)
       .to(nextImg, { opacity: 1, ease: "none" }, 0);
     } else if (nextImg && projectIdx === 0 && slideIdx === 0) {
-      nextImg.style.opacity = 1;
+      nextImg.style.opacity = "1";
     }
     
     ScrollTrigger.create({
@@ -219,8 +219,8 @@ Array.from(projectEl.querySelectorAll('.description')).forEach((slideEl, slideId
       start: "top 50%",
       end: "bottom 50%",
       markers: false,
-      onEnter: () => updateActiveDesc(slideEl),
-      onEnterBack: () => updateActiveDesc(slideEl)
+      onEnter: () => updateActiveDesc(slideEl as HTMLElement),
+      onEnterBack: () => updateActiveDesc(slideEl as HTMLElement)
     });
 
     ScrollTrigger.create({
@@ -236,7 +236,7 @@ Array.from(projectEl.querySelectorAll('.description')).forEach((slideEl, slideId
   });
 });
 
-function updateActiveDesc(activeSlide) {
+function updateActiveDesc(activeSlide: HTMLElement) {
   document.querySelectorAll('.description').forEach(slide => {
     slide.classList.toggle('active-desc', slide === activeSlide);
   });

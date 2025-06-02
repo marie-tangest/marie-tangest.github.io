@@ -1,33 +1,27 @@
 {
-  "name": "portfolio",
+  "name": "marie-tangest.github.io",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "format": "prettier --write \"**/*.{js,jsx,json,scss,css}\"",
-    "lint": "eslint src --ext .js",
-    "lint:fix": "eslint src --ext .js --fix"
-  },
-  "dependencies": {
-    "gsap": "^3.13.0"
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.14",
-    "eslint": "^8.56.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "postcss": "^8.4.21",
-    "prettier": "^3.0.0",
-    "sass": "^1.62.1",
-    "vite": "^5.2.0",
-    "vite-plugin-sass": "^0.1.0"
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.4",
+    "postcss-preset-env": "^10.2.0",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5"
   },
   "browserslist": [
-    "defaults",
-    "not IE 11",
-    "maintained node versions"
-  ]
+    "> 0.5%",
+    "last 3 versions",
+    "Firefox ESR",
+    "not dead"
+  ],
+  "dependencies": {
+    "gsap": "^3.13.0"
+  }
 }
