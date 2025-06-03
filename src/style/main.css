@@ -8,7 +8,6 @@
   --image-frame-height: 70vh;
   --below-hero-bar-spacing: calc(100vh - var(--hero-bar-height));
   --profile-margin: 10px;
-  --image-content-offset: calc(((100vh - (var(--image-frame-height) + var(--hero-bar-spacing))) / 2) + (var(--image-frame-height) + var(--hero-bar-spacing)));
 }
 
 @keyframes bounce {
@@ -194,6 +193,8 @@ a {
 }
 
 .projects {
+  display: block;
+
   .view {
     display: flex;
     gap: 5vw;
@@ -212,6 +213,7 @@ a {
         border-radius: 2rem;
         margin: auto 0 auto auto;
         position: relative;
+        background-color: #ffffff;
 
         .image {
           display: block;
@@ -236,8 +238,6 @@ a {
       justify-content: space-between;
       height: 100%;
       width: 40%;
-      padding-top: var(--image-content-offset);
-      padding-bottom: var(--image-content-offset);
       margin-bottom: 200vh;
       
       .info {

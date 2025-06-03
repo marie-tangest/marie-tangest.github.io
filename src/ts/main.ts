@@ -84,32 +84,32 @@ gsap.from('.projects .view .frame', {
 
 ScrollTrigger.create({
   trigger: '.projects',
-  start: heroBarHeight > 0 ? `top top+=${heroBarHeight}` : "top top",
+  start: `top top+=${heroBarHeight}`,
   endTrigger: 'body',
-  end: heroBarHeight > 0 ? `bottom-=${heroBarHeight} top` : "bottom top",
+  end: `bottom-=${heroBarHeight} top`,
   scrub: true,
   markers: false,
   pin: '.projects .view .images',
   pinSpacing: false
 });
 
-// Hide all images except the very first
+const frameMargin = (getCssVariableInPixels("--below-hero-bar-spacing") - getCssVariableInPixels("--image-frame-height"))/2;
+const frameOffset = getCssVariableInPixels("--image-frame-height") + frameMargin - (getCssVariableInPixels("--image-frame-height")/4);
+gsap.set('.projects .view .content', { paddingTop: frameOffset, paddingBottom: frameOffset });
+
 document.querySelectorAll('.view .frame .image').forEach(img => (img as HTMLElement).style.opacity = "0");
 (document.querySelector('.view .frame .image[data-project="0"][data-slide="0"]') as HTMLElement).style.opacity = "1";
 
-// Set all descriptions to faded, only the very first is full
 document.querySelectorAll('.description').forEach(slide => slide.classList.remove('active-desc'));
 (document.querySelector('.description[data-slide="0"]') as HTMLElement).classList.add('active-desc');
 
-// For each slide, scrubbed crossfade between images as before,
-// PLUS: update active-desc class on bulletpoints as you scroll
 document.querySelectorAll('.projects .view .content .info').forEach((projectEl, projectIdx) => {
   const titleEl = projectEl.querySelector('.title') as HTMLElement;
   ScrollTrigger.create({
     trigger: projectEl,
-    start: heroBarHeight > 0 ? `top top+=${heroBarHeight}` : "top top",
+    start: `top top+=${heroBarHeight}`,
     endTrigger: '.projects .view .content',
-    end: heroBarHeight > 0 ? `bottom-=${heroBarHeight} top` : "bottom top",
+    end: `bottom-=${heroBarHeight} top`,
     scrub: true,
     markers: false,
     pinSpacing: false,
@@ -128,8 +128,8 @@ Array.from(projectEl.querySelectorAll('.description')).forEach((slideEl, slideId
       gsap.timeline({
         scrollTrigger: {
           trigger: slideEl,
-          start: "top 60%",
-          end: "top 30%",
+          start: `top 60%`,
+          end: `top 30%`,
           scrub: true,
           markers: false,
         }
@@ -142,8 +142,8 @@ Array.from(projectEl.querySelectorAll('.description')).forEach((slideEl, slideId
     
     ScrollTrigger.create({
       trigger: slideEl,
-      start: "top 50%",
-      end: "bottom 50%",
+      start: `top bottom+=${frameOffset}`,
+      end: `top top+=${heroBarHeight + frameOffset}`,
       markers: false,
       onEnter: () => updateActiveDesc(slideEl as HTMLElement),
       onEnterBack: () => updateActiveDesc(slideEl as HTMLElement)
@@ -151,9 +151,9 @@ Array.from(projectEl.querySelectorAll('.description')).forEach((slideEl, slideId
 
     ScrollTrigger.create({
       trigger: slideEl,
-      start: heroBarHeight > 0 ? `top top+=${heroBarHeight}` : "top top",
+      start: `top top+=${heroBarHeight}`,
       endTrigger: '.projects .view .content',
-      end: heroBarHeight > 0 ? `bottom-=${heroBarHeight} top` : "bottom top",
+      end: `bottom-=${heroBarHeight} top`,
       scrub: true,
       markers: false,
       pinSpacing: false,
