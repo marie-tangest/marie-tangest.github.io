@@ -10,8 +10,6 @@ gsap.registerPlugin(ScrollTrigger, Flip);
 optimizeTicker(gsap, 30);
 
 const heroBarHeight = getCssVariableInPixels("--hero-bar-height");
-const postHeroSpacer = getCssVariableInPixels("--post-hero-spacer");
-const heroBarSpacing = heroBarHeight + postHeroSpacer;
 const profileMargin = getCssVariableInPixels("--profile-margin");
 const profileImageHeight = heroBarHeight - (profileMargin * 2);
 const frameMarginLeft = (document.querySelector('.projects .view .frame') as HTMLElement).offsetLeft;
@@ -27,37 +25,35 @@ gsap.timeline({
   }
 })
 .to(".hero .profile", {
-  marginLeft: profileMargin,
   marginBottom: profileMargin,
   gap: "0.75rem",
-  lineHeight: 1,
-  ease: 'power1.inOut',
+  ease: 'power4.inOut',
 })
-.to(".hero .frame", {
+.to(".hero .profile .frame", {
   height: profileImageHeight,
   width: profileImageHeight,
-  boxShadow: "0px 0px 0px 0px rgba(0, 0, 0, 0)",
-  borderWidth: 0,
-  borderColor: "transparent",
-  ease: 'power1.inOut',
+  ease: 'power4.inOut',
 }, "<")
-.to(".hero .info .name", {
+.to(".hero .profile", {
+  gap: "1rem",
+  ease: 'power4.inOut'
+}, "<")
+.to(".hero .profile .info .name", {
   fontSize: "1.5rem",
-  marginTop: "0.5rem",
-  ease: 'power1.inOut'
+  ease: 'power4.inOut'
 }, "<")
-.to([".hero .info .contact .title", ".hero .info .contact .email", ".hero .info .contact .phone"], {
+.to([".hero .profile .info .title", ".hero .profile .contact .email", ".hero .profile .contact .phone"], {
   fontSize: "1rem",
-  ease: 'power1.inOut',
+  ease: 'power4.inOut',
 }, "<")
 .to(".hero .scroll", {
   opacity: 0,
   marginBottom: -heroBarHeight,
-  ease: 'power1.inOut',
+  ease: 'power4.out',
 }, "<")
 .to("#gradient-canvas", {
   opacity: 0,
-  ease: 'power1.inOut',
+  ease: 'power4.inOut',
 }, "<");
 
 ScrollTrigger.create({
@@ -69,43 +65,6 @@ ScrollTrigger.create({
   markers: false,
   pin: true,
   pinSpacing: false
-});
-
-let directionSwitched = false;
-const container = document.querySelector(".hero .info .contact") as HTMLElement;
-gsap.timeline({
-  scrollTrigger: {
-    trigger: ".hero",
-    start: "top top",
-    end: `bottom-=${heroBarHeight} top`,
-    markers: false,
-    pinSpacing: false,
-    scrub: true,
-    onUpdate: self => {
-      const progress = self.progress;
-      if (progress > 0.5 && !directionSwitched) {
-        container.style.flexDirection = "row";
-        container.style.alignItems = "center";
-        container.style.gap = "1rem";
-        directionSwitched = true;
-      } else if (progress < 0.5 && directionSwitched) {
-        container.style.flexDirection = "column";
-        container.style.alignItems = "flex-start";
-        container.style.gap = "0rem";
-        directionSwitched = false;
-      }
-    },
-  }
-})
-.to(container, {
-  opacity: 0,
-  duration: 0.2,
-  ease: 'power1.inOut',
-})
-.to(container, {
-  opacity: 1,
-  duration: 0.2,
-  ease: 'power1.inOut',
 });
 
 gsap.from('.projects .view .frame', {
@@ -125,9 +84,9 @@ gsap.from('.projects .view .frame', {
 
 ScrollTrigger.create({
   trigger: '.projects',
-  start: heroBarSpacing > 0 ? `top top+=${heroBarSpacing}` : "top top",
+  start: heroBarHeight > 0 ? `top top+=${heroBarHeight}` : "top top",
   endTrigger: 'body',
-  end: heroBarSpacing > 0 ? `bottom-=${heroBarSpacing} top` : "bottom top",
+  end: heroBarHeight > 0 ? `bottom-=${heroBarHeight} top` : "bottom top",
   scrub: true,
   markers: false,
   pin: '.projects .view .images',
@@ -148,9 +107,9 @@ document.querySelectorAll('.projects .view .content .info').forEach((projectEl, 
   const titleEl = projectEl.querySelector('.title') as HTMLElement;
   ScrollTrigger.create({
     trigger: projectEl,
-    start: heroBarSpacing > 0 ? `top top+=${heroBarSpacing}` : "top top",
+    start: heroBarHeight > 0 ? `top top+=${heroBarHeight}` : "top top",
     endTrigger: '.projects .view .content',
-    end: heroBarSpacing > 0 ? `bottom-=${heroBarSpacing} top` : "bottom top",
+    end: heroBarHeight > 0 ? `bottom-=${heroBarHeight} top` : "bottom top",
     scrub: true,
     markers: false,
     pinSpacing: false,
@@ -192,9 +151,9 @@ Array.from(projectEl.querySelectorAll('.description')).forEach((slideEl, slideId
 
     ScrollTrigger.create({
       trigger: slideEl,
-      start: heroBarSpacing > 0 ? `top top+=${heroBarSpacing}` : "top top",
+      start: heroBarHeight > 0 ? `top top+=${heroBarHeight}` : "top top",
       endTrigger: '.projects .view .content',
-      end: heroBarSpacing > 0 ? `bottom-=${heroBarSpacing} top` : "bottom top",
+      end: heroBarHeight > 0 ? `bottom-=${heroBarHeight} top` : "bottom top",
       scrub: true,
       markers: false,
       pinSpacing: false,
