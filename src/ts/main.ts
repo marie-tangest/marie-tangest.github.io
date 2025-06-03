@@ -1,10 +1,11 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Flip } from 'gsap/Flip';
 import { Gradient } from './hero.js';
 import optimizeTicker from './tick-optimizer';
 import { getCssVariableInPixels } from './utilities';
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, Flip);
 
 optimizeTicker(gsap, 30);
 

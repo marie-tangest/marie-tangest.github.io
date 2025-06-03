@@ -22,7 +22,7 @@
 }
 
 body {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   line-height: 1.6;
   color: var(--text-color);
   background: #cdc2b6;
@@ -86,49 +86,50 @@ a {
     gap: 2rem;
     margin: auto;
     will-change: transform, opacity;
+
+    h1, h2 {
+      margin-bottom: 0;
+      font-weight: unset;
+    }
+
+    .name h1 {
+      font-family: 'Prata', serif;
+      font-size: 3.5rem;
+      font-weight: 400;
+      will-change: transform;
+    }
     
     .info {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      justify-content: space-between;
       height: 100%;
       color: #000000;
       z-index: 1;
       will-change: transform;
 
-      h1, h2 {
-        margin-bottom: 0;
-      }
-
-      .name {
-        font-family: 'Playfair Display', serif;
-        font-size: 4rem;
-        font-weight: 400;
-        will-change: transform;
-      }
-
       .contact {
         display: flex;
         flex-direction: column;
-        font-family: 'Lato', sans-serif;
+        font-family: 'Montserrat', serif;
         height: 100%;
         justify-content: space-around;
         align-items: baseline;
         will-change: transform;
+        font-weight: 400;
 
         .title {
           font-size: 2rem;
-          font-weight: 100;
           will-change: transform;
+          white-space: nowrap;
         }
 
         .email, .phone {
           font-size: 1.25rem;
-          font-weight: 100;
           color: #000000;
           transition: color 0.5s ease;
           will-change: transform, opacity;
+          white-space: nowrap;
           
           &:hover {
             color: rgba(0, 0, 0, 0.5);
