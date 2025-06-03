@@ -2,31 +2,39 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Gradient } from './hero.js';
 import optimizeTicker from './tick-optimizer';
+import { getCssVariableInPixels } from './utilities';
 
 gsap.registerPlugin(ScrollTrigger);
 
 optimizeTicker(gsap, 30);
 
+const heroBarHeight = getCssVariableInPixels("--hero-bar-height");
+const postHeroSpacer = getCssVariableInPixels("--post-hero-spacer");
+const heroBarSpacing = heroBarHeight + postHeroSpacer;
+const profileMargin = getCssVariableInPixels("--profile-margin");
+const profileImageHeight = heroBarHeight - (profileMargin * 2);
+const frameMarginLeft = (document.querySelector('.projects .view .frame') as HTMLElement).offsetLeft;
+
 gsap.timeline({
   scrollTrigger: {
     trigger: ".hero",
     start: "top top",
-    end: "bottom-=100 top",
+    end: `bottom-=${heroBarHeight} top`,
     markers: false,
     pinSpacing: false,
     scrub: true
   }
 })
 .to(".hero .profile", {
-  marginLeft: "10px",
-  marginBottom: "10px",
+  marginLeft: profileMargin,
+  marginBottom: profileMargin,
   gap: "0.75rem",
   lineHeight: 1,
   ease: 'power1.inOut',
 })
-.to(".hero .image-frame", {
-  height: 80,
-  width: 80,
+.to(".hero .frame", {
+  height: profileImageHeight,
+  width: profileImageHeight,
   boxShadow: "0px 0px 0px 0px rgba(0, 0, 0, 0)",
   borderWidth: 0,
   borderColor: "transparent",
@@ -43,7 +51,7 @@ gsap.timeline({
 }, "<")
 .to(".hero .scroll", {
   opacity: 0,
-  marginBottom: "-100px",
+  marginBottom: -heroBarHeight,
   ease: 'power1.inOut',
 }, "<")
 .to("#gradient-canvas", {
@@ -53,9 +61,9 @@ gsap.timeline({
 
 ScrollTrigger.create({
   trigger: ".hero",
-  start: "bottom-=100 top",
+  start: `bottom-=${heroBarHeight} top`,
   endTrigger: "body",
-  end: "bottom-=100 top",
+  end: `bottom-=${heroBarHeight} top`,
   scrub: true,
   markers: false,
   pin: true,
@@ -68,7 +76,7 @@ gsap.timeline({
   scrollTrigger: {
     trigger: ".hero",
     start: "top top",
-    end: "bottom-=100 top",
+    end: `bottom-=${heroBarHeight} top`,
     markers: false,
     pinSpacing: false,
     scrub: true,
@@ -99,55 +107,15 @@ gsap.timeline({
   ease: 'power1.inOut',
 });
 
-Array.from(document.querySelectorAll('.swirl-path')).forEach((path: Element) => {
-  const length = (path as SVGPathElement).getTotalLength();
-  (path as SVGPathElement).style.strokeDasharray = length.toString();
-  (path as SVGPathElement).style.strokeDashoffset = length.toString();
-});
-
-gsap.timeline({
-  scrollTrigger: {
-    trigger: '.projects',
-    start: 'top bottom',
-    end: 'top top+=100',
-    endTrigger: '.projects .header',
-    scrub: true,
-    markers: false,
-    pinSpacing: false
-  }
-})
-.from('.projects .header .title', {
-  y: "100vh",
-  duration: 1,
-  ease: 'power1.inOut',
-})
-.to(document.querySelectorAll('.swirl-path'), { 
-  strokeDashoffset: 0,
-  duration: 0.5,
-  ease: 'power1.inOut'
-}, 0.5);
-
-ScrollTrigger.create({
-  trigger: '.projects .header',
-  start: 'top top+=100',
-  endTrigger: 'body',
-  end: 'bottom-=100 top',
-  scrub: true,
-  markers: false,
-  pin: true,
-  pinSpacing: false
-});
-
 gsap.from('.projects .view .frame', {
-  y: "500vh",
-  width: "5%",
+  width: "25%",
   borderRadius: 0,
-  ease: 'power1.inOut',
+  marginRight: `${frameMarginLeft}px`,
+  ease: 'none',
   scrollTrigger: {
-    trigger: '.projects',
-    start: 'top bottom',
-    end: 'top top+=100',
-    endTrigger: '.projects .header',
+    trigger: '.hero',
+    start: 'bottom bottom',
+    end: `bottom top+=${heroBarHeight}`,
     scrub: true,
     markers: false,
     pinSpacing: false
@@ -155,10 +123,10 @@ gsap.from('.projects .view .frame', {
 });
 
 ScrollTrigger.create({
-  trigger: '.projects .header',
-  start: 'top top+=100',
+  trigger: '.projects',
+  start: heroBarSpacing > 0 ? `top top+=${heroBarSpacing}` : "top top",
   endTrigger: 'body',
-  end: 'bottom-=100 top',
+  end: heroBarSpacing > 0 ? `bottom-=${heroBarSpacing} top` : "bottom top",
   scrub: true,
   markers: false,
   pin: '.projects .view .images',
@@ -173,17 +141,15 @@ document.querySelectorAll('.view .frame .image').forEach(img => (img as HTMLElem
 document.querySelectorAll('.description').forEach(slide => slide.classList.remove('active-desc'));
 (document.querySelector('.description[data-slide="0"]') as HTMLElement).classList.add('active-desc');
 
-const projectsTitle = document.querySelector('.projects .header') as HTMLElement;
-
 // For each slide, scrubbed crossfade between images as before,
 // PLUS: update active-desc class on bulletpoints as you scroll
 document.querySelectorAll('.projects .view .content .info').forEach((projectEl, projectIdx) => {
   const titleEl = projectEl.querySelector('.title') as HTMLElement;
   ScrollTrigger.create({
     trigger: projectEl,
-    start: `top top+=${projectsTitle.offsetHeight + 100}`,
+    start: heroBarSpacing > 0 ? `top top+=${heroBarSpacing}` : "top top",
     endTrigger: '.projects .view .content',
-    end: 'bottom top',
+    end: heroBarSpacing > 0 ? `bottom-=${heroBarSpacing} top` : "bottom top",
     scrub: true,
     markers: false,
     pinSpacing: false,
@@ -225,9 +191,9 @@ Array.from(projectEl.querySelectorAll('.description')).forEach((slideEl, slideId
 
     ScrollTrigger.create({
       trigger: slideEl,
-      start: `top top+=${projectsTitle.offsetHeight + 100}`,
+      start: heroBarSpacing > 0 ? `top top+=${heroBarSpacing}` : "top top",
       endTrigger: '.projects .view .content',
-      end: 'bottom top',
+      end: heroBarSpacing > 0 ? `bottom-=${heroBarSpacing} top` : "bottom top",
       scrub: true,
       markers: false,
       pinSpacing: false,

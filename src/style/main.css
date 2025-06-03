@@ -1,16 +1,16 @@
 :root {
   --primary-color: #3b82f6;
-  --primary-hover: #60a5fa;
-  --dark-bg: #0f172a;
-  --darker-bg: #020617;
   --text-color: #000;
   --text-muted: #94a3b8;
   --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  --border-radius: 8px;
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   --profile-dimensions: 200px;
+  --hero-bar-height: 100px;
+  --post-hero-spacer: 0px;
+  --image-frame-height: 70vh;
+  --hero-bar-spacing: calc(var(--hero-bar-height) + var(--post-hero-spacer));
+  --below-hero-bar-spacing: calc(100vh - (var(--hero-bar-height) + var(--post-hero-spacer)));
+  --profile-margin: 10px;
+  --image-content-offset: calc(((100vh - (var(--image-frame-height) + var(--hero-bar-spacing))) / 2) + (var(--image-frame-height) + var(--hero-bar-spacing)));
 }
 
 *,
@@ -137,7 +137,7 @@ a {
       }
     }
 
-    .image-frame {
+    .frame {
       width: var(--profile-dimensions);
       height: var(--profile-dimensions);
       border-radius: 50%;
@@ -195,48 +195,28 @@ a {
   }
 }
 
+.post-hero-spacer {
+  height: var(--post-hero-spacer);
+}
+
 .projects {
-  .header {
-    padding: 2rem 0;
-    
-    .title {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 2rem;
-
-      svg {
-        width: auto;
-        height: 2rem;
-      }
-
-      h2 {
-        font-size: 2.5rem;
-        font-weight: 100;
-        margin: 0;
-        text-align: center;
-        font-family: 'Playfair Display', serif;
-      }
-    }
-  }
-  
   .view {
     display: flex;
-    gap: 1.5rem;
+    gap: 5vw;
 
     .images {
-      display: block;
+      display: flex;
       width: 50%;
-      padding: 0 2rem;
       position: relative;
+      height: var(--below-hero-bar-spacing);
       
       .frame {
         display: block;
-        width: 70vh;
+        width: var(--image-frame-height);
         aspect-ratio: 1/1;
         overflow: hidden;
-        border-radius: .5rem;
-        margin: 0 0 0 auto;
+        border-radius: 2rem;
+        margin: auto 0 auto auto;
         position: relative;
 
         .image {
@@ -262,8 +242,8 @@ a {
       justify-content: space-between;
       height: 100%;
       width: 40%;
-      padding-top: 50vh;
-      padding-bottom: 50vh;
+      padding-top: var(--image-content-offset);
+      padding-bottom: var(--image-content-offset);
       margin-bottom: 200vh;
       
       .info {
