@@ -9,6 +9,9 @@ gsap.registerPlugin(ScrollTrigger, Flip);
 
 optimizeTicker(gsap, 30);
 
+const lineHeight = getCssVariableInPixels("--line-height");
+const headingLineHeight = getCssVariableInPixels("--heading-line-height");
+
 const heroBarHeight = getCssVariableInPixels("--hero-bar-height");
 const profileMargin = getCssVariableInPixels("--profile-margin");
 const profileImageHeight = heroBarHeight - (profileMargin * 2);
@@ -93,8 +96,13 @@ ScrollTrigger.create({
   pinSpacing: false
 });
 
-const frameMargin = (getCssVariableInPixels("--below-hero-bar-spacing") - getCssVariableInPixels("--image-frame-height"))/2;
-const frameOffset = getCssVariableInPixels("--image-frame-height") + frameMargin - (getCssVariableInPixels("--image-frame-height")/4);
+const frameHeight = getCssVariableInPixels("--image-frame-height");
+const frameMargin = (getCssVariableInPixels("--below-hero-bar-spacing") - frameHeight)/2;
+const frameOffset = frameHeight + frameMargin - (frameHeight/4);
+const frameTop = frameMargin + heroBarHeight;
+const contentTitleSize = getCssVariableInPixels("--image-content-title-size");
+const contentDescriptionSize = getCssVariableInPixels("--image-content-description-size");
+
 gsap.set('.projects .view .content', { paddingTop: frameOffset, paddingBottom: frameOffset });
 
 document.querySelectorAll('.view .frame .image').forEach(img => (img as HTMLElement).style.opacity = "0");
@@ -105,18 +113,28 @@ document.querySelectorAll('.description').forEach(slide => slide.classList.remov
 
 document.querySelectorAll('.projects .view .content .info').forEach((projectEl, projectIdx) => {
   const titleEl = projectEl.querySelector('.title') as HTMLElement;
+  gsap.to(titleEl, {
+    scrollTrigger: {
+      trigger: titleEl,
+      start: `top top+=${frameTop + (frameHeight/3)}`,
+      end: `top top+=${frameTop + (frameHeight/3) - contentTitleSize}`,
+      scrub: true,
+      markers: true,
+    },
+    y: contentTitleSize-(frameHeight/3),
+    ease: 'power4.out'
+  });
+
   ScrollTrigger.create({
-    trigger: projectEl,
-    start: `top top+=${heroBarHeight}`,
+    trigger: titleEl,
+    start: `top top+=${frameTop + (frameHeight/3) - contentTitleSize - 1}`,
     endTrigger: '.projects .view .content',
     end: `bottom-=${heroBarHeight} top`,
     scrub: true,
-    markers: false,
-    pinSpacing: false,
-    pin: titleEl
+    pin: true
   });
 
-Array.from(projectEl.querySelectorAll('.description')).forEach((slideEl, slideIdx) => {
+  Array.from(projectEl.querySelectorAll('.description')).forEach((slideEl, slideIdx) => {
     let nextImg = document.querySelector(`.image[data-project="${projectIdx}"][data-slide="${slideIdx}"]`) as HTMLElement;
     let prevImg = null;
     if (slideIdx === 0 && projectIdx > 0) {
@@ -151,7 +169,7 @@ Array.from(projectEl.querySelectorAll('.description')).forEach((slideEl, slideId
 
     ScrollTrigger.create({
       trigger: slideEl,
-      start: `top top+=${heroBarHeight}`,
+      start: `top top+=${frameTop + contentTitleSize}`,
       endTrigger: '.projects .view .content',
       end: `bottom-=${heroBarHeight} top`,
       scrub: true,
@@ -167,6 +185,8 @@ function updateActiveDesc(activeSlide: HTMLElement) {
     slide.classList.toggle('active-desc', slide === activeSlide);
   });
 }
+
+ScrollTrigger.refresh();
 
 const gradient = new Gradient();
 gradient.initGradient("#gradient-canvas");
