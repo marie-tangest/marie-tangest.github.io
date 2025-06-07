@@ -102,6 +102,7 @@ const frameOffset = frameHeight + frameMargin - (frameHeight/4);
 const frameTop = frameMargin + heroBarHeight;
 const contentTitleSize = getCssVariableInPixels("--image-content-title-size");
 const contentDescriptionSize = getCssVariableInPixels("--image-content-description-size");
+const titleSlideStart = frameHeight*(2/3)
 
 gsap.set('.projects .view .content', { paddingTop: frameOffset, paddingBottom: frameOffset });
 
@@ -113,25 +114,39 @@ document.querySelectorAll('.description').forEach(slide => slide.classList.remov
 
 document.querySelectorAll('.projects .view .content .info').forEach((projectEl, projectIdx) => {
   const titleEl = projectEl.querySelector('.title') as HTMLElement;
-  gsap.to(titleEl, {
-    scrollTrigger: {
-      trigger: titleEl,
-      start: `top top+=${frameTop + (frameHeight/3)}`,
-      end: `top top+=${frameTop + (frameHeight/3) - contentTitleSize}`,
-      scrub: true,
-      markers: true,
-    },
-    y: contentTitleSize-(frameHeight/3),
-    ease: 'power4.out'
-  });
-
+  const nextSibling = projectEl.nextElementSibling as HTMLElement;
+  console.log(nextSibling);
+  gsap.set(titleEl, { opacity: 0 });
   ScrollTrigger.create({
     trigger: titleEl,
-    start: `top top+=${frameTop + (frameHeight/3) - contentTitleSize - 1}`,
-    endTrigger: '.projects .view .content',
-    end: `bottom-=${heroBarHeight} top`,
+    start: `top top+=${frameTop}`,
+    endTrigger: nextSibling || '.projects .view .content',
+    end: nextSibling ? `top top+=${frameTop + (frameHeight/2)}` : `bottom-=${heroBarHeight} top`,
     scrub: true,
-    pin: true
+    pin: true,
+    pinSpacing: false
+  });
+  gsap.to(titleEl, {
+    opacity: 1,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: titleEl,
+      start: `top bottom-=${frameMargin/2}`,
+      end: `top top+=${frameTop + frameHeight - contentTitleSize}`,
+      scrub: true,
+      markers: false,
+    }
+  });
+  gsap.to(titleEl, {
+    opacity: 0,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: titleEl,
+      start: `top top+=${frameTop}`,
+      end: `top top+=${frameTop - (frameMargin/2)}`,
+      scrub: true,
+      markers: false,
+    }
   });
 
   Array.from(projectEl.querySelectorAll('.description')).forEach((slideEl, slideIdx) => {
