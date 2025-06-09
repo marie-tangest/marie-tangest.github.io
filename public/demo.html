@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSAP ScrollTrigger Advanced Demo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .spacer {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            margin: 20px 0;
+            border-radius: 20px;
+        }
+        
+        .text-block {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .text-block.hero {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            opacity: 0;
+        }
+        
+        .text-block h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .text-block h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #fff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .text-block h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #f0f0f0;
+        }
+        
+        .text-block p {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.9);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .debug-info {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .vh-line-25 {
+            position: fixed;
+            top: 25vh;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255, 107, 107, 0.5);
+            z-index: 100;
+            pointer-events: none;
+        }
+        
+        .vh-line-50 {
+            position: fixed;
+            top: 50vh;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255, 193, 7, 0.5);
+            z-index: 100;
+            pointer-events: none;
+        }
+        
+        .vh-line-75 {
+            position: fixed;
+            top: 75vh;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(78, 205, 196, 0.5);
+            z-index: 100;
+            pointer-events: none;
+        }
+        
+        .vh-label {
+            position: fixed;
+            right: 20px;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 101;
+            pointer-events: none;
+        }
+        
+        .vh-label.vh-25 { top: calc(25vh - 10px); color: #ff6b6b; }
+        .vh-label.vh-50 { top: calc(50vh - 10px); color: #ffc107; }
+        .vh-label.vh-75 { top: calc(75vh - 10px); color: #4ecdc4; }
+    </style>
+</head>
+<body>
+    <div class="debug-info" id="debugInfo">
+        Phase: Initial<br>
+        Opacity: 0.00<br>
+        Y Position: 0px<br>
+        Pinned: false
+    </div>
+    
+    <div class="vh-line-25"></div>
+    <div class="vh-line-50"></div>
+    <div class="vh-line-75"></div>
+    <div class="vh-label vh-25">25vh (Pin Point)</div>
+    <div class="vh-label vh-50">50vh (Unpin Trigger)</div>
+    <div class="vh-label vh-75">75vh (Fade End)</div>
+    
+    <div class="container">
+        <div class="spacer">
+            <div>Scroll down to see the smooth animation ↓</div>
+        </div>
+        
+        <div class="text-block hero" id="heroBlock">
+            <h1>Hero Text Block</h1>
+            <p>Watch the smooth transitions through each phase:</p>
+            <p>• <strong>Phase 1:</strong> Fade in from bottom to 75vh line</p>
+            <p>• <strong>Phase 2:</strong> 2x speed scroll to 25vh line</p>
+            <p>• <strong>Phase 3:</strong> Pin smoothly at 25vh</p>
+            <p>• <strong>Phase 4:</strong> Unpin and fade out to top</p>
+        </div>
+        
+        <div class="text-block">
+            <h3>Text Block 2</h3>
+            <p>Regular scrolling content. The hero block should be fading in smoothly above as you scroll through this section.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+        </div>
+        
+        <div class="text-block">
+            <h3>Text Block 3</h3>
+            <p>Continue scrolling to see the 2x speed effect. The hero block should be moving faster than normal scroll speed through this section.</p>
+            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+        </div>
+        
+        <div class="text-block">
+            <h3>Text Block 4</h3>
+            <p>The hero block should now be smoothly pinning at the 25vh line. Notice how it stays in place while this content scrolls.</p>
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+        </div>
+        
+        <div class="text-block">
+            <h3>Text Block 5</h3>
+            <p>Still pinned! The hero block is waiting for the H2 trigger below to reach the 50vh yellow line.</p>
+            <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem.</p>
+        </div>
+        
+        <div class="text-block">
+            <h3>Text Block 6</h3>
+            <p>Almost there! The H2 trigger is coming up. Watch for the smooth unpinning transition when it crosses the 50vh line.</p>
+            <p>Quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+        </div>
+        
+        <div class="text-block" id="triggerBlock">
+            <h2 id="triggerH2">🎯 Unpin Trigger H2</h2>
+            <p><strong>This H2 crossing 50vh triggers smooth unpinning!</strong></p>
+            <p>The hero block will smoothly transition from pinned to unpinned, then fade out as it moves to the top of the screen.</p>
+        </div>
+        
+        <div class="text-block">
+            <h3>Text Block 8</h3>
+            <p>The hero block should now be smoothly fading out and moving upward. No jumping or sudden disappearing!</p>
+            <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam.</p>
+        </div>
+        
+        <div class="text-block">
+            <h3>Text Block 9</h3>
+            <p>Final section - the hero block should have smoothly faded out completely by now.</p>
+            <p>Eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam.</p>
+        </div>
+        
+        <div class="spacer">
+            <div>Animation Complete! ✨ Scroll back up to see it again ↑</div>
+        </div>
+    </div>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+        
+        const heroBlock = document.getElementById('heroBlock');
+        const triggerH2 = document.getElementById('triggerH2');
+        const debugInfo = document.getElementById('debugInfo');
+        
+        function updateDebug(phase, opacity, yPos, pinned) {
+            debugInfo.innerHTML = `
+                Phase: ${phase}<br>
+                Opacity: ${opacity.toFixed(2)}<br>
+                Y Position: ${yPos.toFixed(0)}px<br>
+                Pinned: ${pinned}
+            `;
+        }
+        
+        // Initialize
+        gsap.set(heroBlock, { 
+            opacity: 0,
+            y: 0
+        });
+        
+        // Phase 1: Fade in (top bottom → bottom 75vh)
+        ScrollTrigger.create({
+            trigger: heroBlock,
+            start: "top bottom",
+            end: "bottom 75vh",
+            scrub: true,
+            onUpdate: (self) => {
+                const opacity = self.progress;
+                gsap.set(heroBlock, { opacity });
+                updateDebug("Phase 1: Fade In", opacity, 0, false);
+            }
+        });
+        
+        // Phase 2: 2x speed movement (bottom 75vh → top 25vh)
+        ScrollTrigger.create({
+            trigger: heroBlock,
+            start: "bottom 75vh",
+            end: "top 25vh",
+            scrub: 0.5, // Faster scrub for 2x effect
+            onUpdate: (self) => {
+                updateDebug("Phase 2: 2x Speed", 1, 0, false);
+            }
+        });
+        
+        // Phase 3: Pin at 25vh
+        let pinTrigger = ScrollTrigger.create({
+            trigger: heroBlock,
+            start: "top 25vh",
+            end: () => {
+                // Calculate when H2 reaches 50vh
+                const h2Top = triggerH2.getBoundingClientRect().top + window.scrollY;
+                const triggerPoint = h2Top - window.innerHeight * 0.5;
+                const currentScroll = window.scrollY;
+                const pinStart = ScrollTrigger.getById("heroPin")?.start || 0;
+                return `+=${Math.max(100, triggerPoint - pinStart)}`;
+            },
+            pin: true,
+            pinSpacing: false,
+            id: "heroPin",
+            onStart: () => {
+                updateDebug("Phase 3: Pinned", 1, 0, true);
+            },
+            onEnd: () => {
+                // Smooth transition to unpinned state
+                gsap.set(heroBlock, { 
+                    position: "relative",
+                    top: "25vh",
+                    opacity: 1
+                });
+                updateDebug("Phase 3: Unpinning", 1, 0, false);
+            }
+        });
+        
+        // Phase 4: Fade out after unpinning
+        ScrollTrigger.create({
+            trigger: triggerH2,
+            start: "top 50vh",
+            end: "top 0vh",
+            scrub: true,
+            onStart: () => {
+                // Ensure smooth transition from pinned state
+                gsap.set(heroBlock, {
+                    position: "fixed",
+                    top: "25vh",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "800px",
+                    maxWidth: "calc(100vw - 40px)",
+                    zIndex: 50
+                });
+            },
+            onUpdate: (self) => {
+                const progress = self.progress;
+                const opacity = 1 - progress;
+                const yOffset = -progress * 25; // Move up 25vh
+                
+                gsap.set(heroBlock, { 
+                    opacity,
+                    y: `${yOffset}vh`
+                });
+                
+                updateDebug("Phase 4: Fade Out", opacity, yOffset * window.innerHeight / 100, false);
+            },
+            onComplete: () => {
+                updateDebug("Complete", 0, -25 * window.innerHeight / 100, false);
+            }
+        });
+        
+        // Refresh ScrollTrigger on resize
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                ScrollTrigger.refresh();
+            }, 100);
+        });
+        
+        // Initial state
+        updateDebug("Initial", 0, 0, false);
+        
+        console.log('Smooth GSAP ScrollTrigger Demo Loaded');
+    </script>
+</body>
+</html>
