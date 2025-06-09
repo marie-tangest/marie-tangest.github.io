@@ -49,9 +49,11 @@
         }
         
         .text-block.hero {
+            position: relative;
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
             border: 2px solid rgba(255, 255, 255, 0.3);
             opacity: 0;
+            z-index: 100;
         }
         
         .text-block h1 {
@@ -232,16 +234,6 @@
         
         const heroBlock = document.getElementById('heroBlock');
         const triggerH2 = document.getElementById('triggerH2');
-        const debugInfo = document.getElementById('debugInfo');
-        
-        function updateDebug(phase, opacity, yPos, pinned) {
-            debugInfo.innerHTML = `
-                Phase: ${phase}<br>
-                Opacity: ${opacity.toFixed(2)}<br>
-                Y Position: ${yPos.toFixed(0)}px<br>
-                Pinned: ${pinned}
-            `;
-        }
         
         // Initialize
         gsap.set(heroBlock, { 
@@ -253,30 +245,18 @@
         ScrollTrigger.create({
             trigger: heroBlock,
             start: "top bottom",
-            end: "bottom 75vh",
+            end: "bottom top+=75vh",
             scrub: true,
             onUpdate: (self) => {
                 const opacity = self.progress;
                 gsap.set(heroBlock, { opacity });
-                updateDebug("Phase 1: Fade In", opacity, 0, false);
-            }
-        });
-        
-        // Phase 2: 2x speed movement (bottom 75vh → top 25vh)
-        ScrollTrigger.create({
-            trigger: heroBlock,
-            start: "bottom 75vh",
-            end: "top 25vh",
-            scrub: 0.5, // Faster scrub for 2x effect
-            onUpdate: (self) => {
-                updateDebug("Phase 2: 2x Speed", 1, 0, false);
             }
         });
         
         // Phase 3: Pin at 25vh
         let pinTrigger = ScrollTrigger.create({
             trigger: heroBlock,
-            start: "top 25vh",
+            start: "top top+=25vh",
             end: () => {
                 // Calculate when H2 reaches 50vh
                 const h2Top = triggerH2.getBoundingClientRect().top + window.scrollY;
@@ -287,54 +267,26 @@
             },
             pin: true,
             pinSpacing: false,
-            id: "heroPin",
-            onStart: () => {
-                updateDebug("Phase 3: Pinned", 1, 0, true);
-            },
-            onEnd: () => {
-                // Smooth transition to unpinned state
-                gsap.set(heroBlock, { 
-                    position: "relative",
-                    top: "25vh",
-                    opacity: 1
-                });
-                updateDebug("Phase 3: Unpinning", 1, 0, false);
-            }
+            id: "heroPin"
         });
         
         // Phase 4: Fade out after unpinning
         ScrollTrigger.create({
             trigger: triggerH2,
-            start: "top 50vh",
-            end: "top 0vh",
+            start: "top top+=50vh",
+            end: "top top+=25vh",
             scrub: true,
-            onStart: () => {
-                // Ensure smooth transition from pinned state
-                gsap.set(heroBlock, {
-                    position: "fixed",
-                    top: "25vh",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    width: "800px",
-                    maxWidth: "calc(100vw - 40px)",
-                    zIndex: 50
-                });
-            },
             onUpdate: (self) => {
                 const progress = self.progress;
                 const opacity = 1 - progress;
-                const yOffset = -progress * 25; // Move up 25vh
                 
                 gsap.set(heroBlock, { 
-                    opacity,
-                    y: `${yOffset}vh`
+                    opacity
                 });
                 
-                updateDebug("Phase 4: Fade Out", opacity, yOffset * window.innerHeight / 100, false);
+                console.log("Update: ", progress);
             },
-            onComplete: () => {
-                updateDebug("Complete", 0, -25 * window.innerHeight / 100, false);
-            }
+            id: "heroFadeOut"
         });
         
         // Refresh ScrollTrigger on resize
@@ -345,11 +297,6 @@
                 ScrollTrigger.refresh();
             }, 100);
         });
-        
-        // Initial state
-        updateDebug("Initial", 0, 0, false);
-        
-        console.log('Smooth GSAP ScrollTrigger Demo Loaded');
     </script>
 </body>
 </html>
