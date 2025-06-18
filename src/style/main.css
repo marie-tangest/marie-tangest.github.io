@@ -10,8 +10,8 @@
   --image-frame-height: 70vh;
   --below-hero-bar-spacing: calc(100vh - var(--hero-bar-height));
   --profile-margin: 10px;
-  --image-content-title-size: 2rem;
-  --image-content-description-size: 1.25rem;
+  --image-content-title-size: 1.5rem;
+  --image-content-description-size: 1rem;
 }
 
 @keyframes bounce {
@@ -76,7 +76,9 @@ a {
   flex-direction: column;
   justify-content: center;
   z-index: 100;
-  background-color: #ffaf0180;
+  background: 
+    linear-gradient(#ffaf0180, #ffaf0180),
+    url("/src/assets/bg.jpg") center / cover repeat fixed;
   will-change: transform, opacity;
 
   #gradient-canvas {
@@ -243,26 +245,34 @@ a {
       height: 100%;
       width: 40%;
       margin-bottom: 200vh;
+      font-family: 'Montserrat', serif;
       
       .info {
         position: relative;
 
         .title {
           font-size: var(--image-content-title-size);
-          font-weight: 100;
-          z-index: 10;
-          margin-bottom: calc(var(--image-frame-height) * 0.5);
+          font-weight: 500;
         }
 
         .description {
           font-size: var(--image-content-description-size);
-          font-weight: 100;
-          margin-bottom: calc(var(--image-frame-height) * 0.5);
-          opacity: 0.25;
-          transition: opacity 0.25s;
+          font-weight: 400;
+          margin: 0;
 
-          &.active-desc {
-            opacity: 1;
+          span {
+            margin-bottom: 1rem;
+            display: block;
+          }
+
+          ul {
+            margin: 0;
+
+            li {
+              margin-bottom: 0.75rem;
+              font-size: var(--image-content-description-size);
+              font-weight: 400;
+            }
           }
         }
       }

@@ -1,16 +1,12 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Flip } from 'gsap/Flip';
 import { Gradient } from './hero.js';
 import optimizeTicker from './tick-optimizer';
 import { getCssVariableInPixels } from './utilities';
 
-gsap.registerPlugin(ScrollTrigger, Flip);
+gsap.registerPlugin(ScrollTrigger);
 
 optimizeTicker(gsap, 30);
-
-const lineHeight = getCssVariableInPixels("--line-height");
-const headingLineHeight = getCssVariableInPixels("--heading-line-height");
 
 const heroBarHeight = getCssVariableInPixels("--hero-bar-height");
 const profileMargin = getCssVariableInPixels("--profile-margin");
@@ -98,57 +94,16 @@ ScrollTrigger.create({
 
 const frameHeight = getCssVariableInPixels("--image-frame-height");
 const frameMargin = (getCssVariableInPixels("--below-hero-bar-spacing") - frameHeight)/2;
-const frameOffset = frameHeight + frameMargin - (frameHeight/4);
-const frameTop = frameMargin + heroBarHeight;
-const contentTitleSize = getCssVariableInPixels("--image-content-title-size");
-const contentDescriptionSize = getCssVariableInPixels("--image-content-description-size");
-const titleSlideStart = frameHeight*(2/3)
+const frameOffset = frameHeight + frameMargin + heroBarHeight;
+const infoOffset = frameHeight*(2/3);
 
 gsap.set('.projects .view .content', { paddingTop: frameOffset, paddingBottom: frameOffset });
+gsap.set('.projects .view .content .info', { paddingBottom: infoOffset, width: frameHeight });
 
 document.querySelectorAll('.view .frame .image').forEach(img => (img as HTMLElement).style.opacity = "0");
 (document.querySelector('.view .frame .image[data-project="0"][data-slide="0"]') as HTMLElement).style.opacity = "1";
 
-document.querySelectorAll('.description').forEach(slide => slide.classList.remove('active-desc'));
-(document.querySelector('.description[data-slide="0"]') as HTMLElement).classList.add('active-desc');
-
 document.querySelectorAll('.projects .view .content .info').forEach((projectEl, projectIdx) => {
-  const titleEl = projectEl.querySelector('.title') as HTMLElement;
-  const nextSibling = projectEl.nextElementSibling as HTMLElement;
-  console.log(nextSibling);
-  gsap.set(titleEl, { opacity: 0 });
-  ScrollTrigger.create({
-    trigger: titleEl,
-    start: `top top+=${frameTop}`,
-    endTrigger: nextSibling || '.projects .view .content',
-    end: nextSibling ? `top top+=${frameTop + (frameHeight/2)}` : `bottom-=${heroBarHeight} top`,
-    scrub: true,
-    pin: true,
-    pinSpacing: false
-  });
-  gsap.to(titleEl, {
-    opacity: 1,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: titleEl,
-      start: `top bottom-=${frameMargin/2}`,
-      end: `top top+=${frameTop + frameHeight - contentTitleSize}`,
-      scrub: true,
-      markers: false,
-    }
-  });
-  gsap.to(titleEl, {
-    opacity: 0,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: titleEl,
-      start: `top top+=${frameTop}`,
-      end: `top top+=${frameTop - (frameMargin/2)}`,
-      scrub: true,
-      markers: false,
-    }
-  });
-
   Array.from(projectEl.querySelectorAll('.description')).forEach((slideEl, slideIdx) => {
     let nextImg = document.querySelector(`.image[data-project="${projectIdx}"][data-slide="${slideIdx}"]`) as HTMLElement;
     let prevImg = null;
@@ -172,34 +127,8 @@ document.querySelectorAll('.projects .view .content .info').forEach((projectEl, 
     } else if (nextImg && projectIdx === 0 && slideIdx === 0) {
       nextImg.style.opacity = "1";
     }
-    
-    ScrollTrigger.create({
-      trigger: slideEl,
-      start: `top bottom+=${frameOffset}`,
-      end: `top top+=${heroBarHeight + frameOffset}`,
-      markers: false,
-      onEnter: () => updateActiveDesc(slideEl as HTMLElement),
-      onEnterBack: () => updateActiveDesc(slideEl as HTMLElement)
-    });
-
-    ScrollTrigger.create({
-      trigger: slideEl,
-      start: `top top+=${frameTop + contentTitleSize}`,
-      endTrigger: '.projects .view .content',
-      end: `bottom-=${heroBarHeight} top`,
-      scrub: true,
-      markers: false,
-      pinSpacing: false,
-      pin: true
-    });
   });
 });
-
-function updateActiveDesc(activeSlide: HTMLElement) {
-  document.querySelectorAll('.description').forEach(slide => {
-    slide.classList.toggle('active-desc', slide === activeSlide);
-  });
-}
 
 ScrollTrigger.refresh();
 
