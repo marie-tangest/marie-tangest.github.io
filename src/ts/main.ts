@@ -82,24 +82,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  const frameHeight = getCssVariableInPixels("--image-frame-height");
+  const frameMargin = (getCssVariableInPixels("--below-hero-bar-spacing") - frameHeight)/2;
+  const frameOffset = frameHeight + frameMargin + heroBarHeight;
+  const frameTop = heroBarHeight + frameMargin;
+  const lastProject = document.querySelector('.projects .view .content .info:last-child') as HTMLElement;
+
   ScrollTrigger.create({
     trigger: '.projects',
     start: `top top+=${heroBarHeight}`,
-    endTrigger: 'body',
-    end: `bottom-=${heroBarHeight} top`,
+    endTrigger: lastProject,
+    end: `bottom bottom-=${frameMargin}`,
     scrub: true,
     markers: false,
     pin: '.projects .view .images',
     pinSpacing: false
   });
 
-  const frameHeight = getCssVariableInPixels("--image-frame-height");
-  const frameMargin = (getCssVariableInPixels("--below-hero-bar-spacing") - frameHeight)/2;
-  const frameOffset = frameHeight + frameMargin + heroBarHeight;
-  const frameTop = heroBarHeight + frameMargin;
-
   gsap.set('.projects .view .content', { paddingTop: frameOffset, paddingBottom: frameOffset });
   gsap.set('.projects .view .content .info', { paddingBottom: frameHeight, width: frameHeight });
+
+  const lastPadding = Math.max(frameHeight - lastProject.getBoundingClientRect().height, 0);
+  gsap.set(lastProject, { paddingBottom: lastPadding });
 
   const allImages = document.querySelectorAll('.view .frame .image') as NodeListOf<HTMLElement>;
   allImages.forEach(img => gsap.set(img, { opacity: 0 }));
@@ -110,13 +114,11 @@ document.addEventListener("DOMContentLoaded", () => {
       .map(img => img as HTMLElement).sort((a, b) => parseInt(a.dataset.slide || '0') - parseInt(b.dataset.slide || '0'));
 
     const tl = gsap.timeline({
-      duration: 1,
       scrollTrigger: {
         trigger: infoEl,
         start: `top bottom-=${frameMargin}`,
-        end: `bottom top+=${frameTop}`,
-        scrub: true,
-        markers: true
+        end: `top top+=${frameTop}`,
+        scrub: true
       }
     });
 
@@ -126,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
         opacity: 1,
         duration: duration,
         ease: "none"
-      }, i * duration);
+      }, `+=${i * duration}`);
     });
   });
 
