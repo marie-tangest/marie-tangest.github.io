@@ -101,8 +101,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   gsap.set('.projects .view .content', { paddingTop: frameOffset, paddingBottom: frameOffset });
   gsap.set('.projects .view .content .info', { paddingBottom: frameHeight, width: frameHeight });
-
-  const lastPadding = Math.max(frameHeight - lastProject.getBoundingClientRect().height, 0);
+  gsap.set(lastProject, { paddingBottom: 0 });
+  const lastProjectHeight = lastProject.getBoundingClientRect().height;
+  const lastPadding = Math.max(frameHeight - lastProjectHeight, 0);
   gsap.set(lastProject, { paddingBottom: lastPadding });
 
   const allImages = document.querySelectorAll('.view .frame .image') as NodeListOf<HTMLElement>;
@@ -117,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
       scrollTrigger: {
         trigger: infoEl,
         start: `top bottom-=${frameMargin}`,
-        end: `top top+=${frameTop}`,
+        end: `top top+=${frameTop + frameMargin}`,
         scrub: true
       }
     });
