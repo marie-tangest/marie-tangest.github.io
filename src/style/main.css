@@ -200,6 +200,7 @@ a {
 
 .projects {
   display: block;
+  width: 100%;
 
   .view {
     display: flex;
@@ -244,7 +245,6 @@ a {
       justify-content: space-between;
       height: 100%;
       width: 40%;
-      margin-bottom: 200vh;
       font-family: 'Montserrat', serif;
       
       .info {
@@ -276,6 +276,32 @@ a {
           }
         }
       }
+    }
+  }
+}
+
+.skills {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: calc(100vh - var(--hero-bar-height));
+  width: 100%;
+  gap: 1rem;
+
+  .title {
+    display: flex;
+    align-items: center;
+    font-size: var(--image-content-title-size);
+    font-weight: 500;
+  }
+
+  .list {
+    padding-top: 50vh;
+    height: 200vh;
+    
+    .item {
+      font-size: var(--image-content-title-size);
+      font-weight: 300;
     }
   }
 }

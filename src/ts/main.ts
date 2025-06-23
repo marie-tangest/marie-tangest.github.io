@@ -105,12 +105,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const lastProjectHeight = lastProject.getBoundingClientRect().height;
   const lastPadding = Math.max(frameHeight - lastProjectHeight, 0);
   gsap.set(lastProject, { paddingBottom: lastPadding });
+  gsap.set(lastProject.parentElement, { paddingBottom: 0 });
 
   const allImages = document.querySelectorAll('.view .frame .image') as NodeListOf<HTMLElement>;
   allImages.forEach(img => gsap.set(img, { opacity: 0 }));
   gsap.set('.view .frame .image[data-project="0"][data-slide="0"]', { opacity: 1 });
 
-  document.querySelectorAll('.projects .view .content .info').forEach((infoEl, projectIdx) => {
+  const projects = Array.from(document.querySelectorAll('.projects .view .content .info') as NodeListOf<HTMLElement>);
+  projects.forEach((infoEl, projectIdx) => {
     const images = Array.from(document.querySelectorAll(`.projects .view .frame .image[data-project="${projectIdx}"]`))
       .map(img => img as HTMLElement).sort((a, b) => parseInt(a.dataset.slide || '0') - parseInt(b.dataset.slide || '0'));
 
@@ -131,6 +133,30 @@ document.addEventListener("DOMContentLoaded", () => {
         ease: "none"
       }, `+=${i * duration}`);
     });
+    
+    if (projectIdx < projects.length - 1) {
+      ScrollTrigger.create({
+        trigger: infoEl,
+        start: `top top+=${frameTop}`,
+        endTrigger: projects[projectIdx + 1],
+        end: `top bottom-=${frameMargin}`,
+        pin: true,
+        scrub: true,
+        markers: false,
+        pinSpacing: false
+      });
+    }
+  });
+
+  ScrollTrigger.create({
+    trigger: ".skills",
+    start: `top top+=${heroBarHeight}`,
+    endTrigger: "body",
+    end: `bottom bottom-=${200}`,
+    scrub: true,
+    markers: false,
+    pin: true,
+    pinSpacing: false
   });
 
   ScrollTrigger.refresh();
