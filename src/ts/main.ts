@@ -148,6 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // https://codepen.io/jh3y/pen/MYgaaem
   ScrollTrigger.create({
     trigger: ".skills",
     start: `top top+=${heroBarHeight}`,
