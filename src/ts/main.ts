@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // https://codepen.io/jh3y/pen/MYgaaem
   ScrollTrigger.create({
-    trigger: ".skills",
+    trigger: ".skills .title",
     start: `top top+=${heroBarHeight}`,
     endTrigger: "body",
     end: `bottom bottom-=${200}`,

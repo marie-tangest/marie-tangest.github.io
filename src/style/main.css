@@ -12,6 +12,8 @@
   --profile-margin: 10px;
   --image-content-title-size: 1.5rem;
   --image-content-description-size: 1rem;
+  --skills-title-size: 3.5rem;
+  --skills-line-height: 1.2;
 }
 
 @keyframes bounce {
@@ -39,7 +41,6 @@ body {
   line-height: var(--line-height);
   color: var(--text-color);
   background: #cdc2b6;
-  overflow-x: hidden;
   min-height: 100vh;
   background: url("/src/assets/bg.jpg");
   background-size: cover;
@@ -284,24 +285,25 @@ a {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  height: calc(100vh - var(--hero-bar-height));
   width: 100%;
   gap: 1rem;
+  font-size: 3rem;
+  line-height: var(--skills-line-height);
 
   .title {
     display: flex;
     align-items: center;
-    font-size: var(--image-content-title-size);
-    font-weight: 500;
+    font-weight: 200;
+    height: calc(100vh - var(--hero-bar-height));
   }
 
   .list {
-    padding-top: 50vh;
+    padding-top: calc(((100vh - var(--hero-bar-height)) / 2) - ((var(--skills-title-size) * var(--skills-line-height)) / 2) + (var(--skills-title-size) * 0));
+    padding-top: calc(50vh - (var(--hero-bar-height) / 2) - (var(--skills-title-size) / 2));
     height: 200vh;
     
     .item {
-      font-size: var(--image-content-title-size);
-      font-weight: 300;
+      font-weight: 200;
     }
   }
 }
