@@ -298,12 +298,26 @@ a {
   }
 
   .list {
-    padding-top: calc(((100vh - var(--hero-bar-height)) / 2) - ((var(--skills-title-size) * var(--skills-line-height)) / 2) + (var(--skills-title-size) * 0));
     padding-top: calc(50vh - (var(--hero-bar-height) / 2) - (var(--skills-title-size) / 2));
     height: 200vh;
     
     .item {
       font-weight: 200;
+      &:nth-child(1) {
+        color: #ff333d;
+      }
+      &:nth-child(2) {
+        color: #a960ee;
+      }
+      &:nth-child(3) {
+        color: #00b7ff;
+      }
+      &:nth-child(4) {
+        color: #ffaf01;
+      }
+      &:nth-child(5) {
+        color: #a960ee;
+      }
     }
   }
 }

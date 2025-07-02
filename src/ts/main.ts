@@ -160,6 +160,8 @@ document.addEventListener("DOMContentLoaded", () => {
     pinSpacing: false
   });
 
+  gsap.set('.skills .list .item:not(:first-child)', { opacity: 0.25, filter: 'blur(5px)' });
+
   ScrollTrigger.refresh();
 
   const gradient = new Gradient();
